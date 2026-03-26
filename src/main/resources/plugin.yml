@@ -1,0 +1,140 @@
+name: TeamWar
+version: '2'
+main: de.niclasl.teamWar.TeamWar
+api-version: '1.21'
+authors: [ Niclas ]
+description: A team-based war plugin with economy, playtime limits, and lobby system.
+depend:
+  - Vault
+  - Multi-Plugin
+
+commands:
+  teamwar:
+    description: Main command for TeamWar
+    permission: teamwar
+    aliases: [tw, twar]
+    permission-message: "&cYou don't have permission to use this command!"
+
+  playtime:
+    description: Shows today's game time
+    permission: playtime
+    aliases: [pt, ptime]
+    permission-message: "&cYou don't have permission to use this command!"
+
+  market:
+    description: Open a market GUI.
+    permission: market
+    permission-message: "&cYou don't have permission to use this command!"
+
+  money:
+    description: Economy management
+    permission: eco
+    aliases: [eco, economy]
+    permission-message: "&cYou don't have permission to use this command!"
+
+  pay:
+    description: Pay money to other players
+    permission: pay
+    permission-message: "&cYou don't have permission to use this command!"
+
+  class:
+    description: Choose your class
+    permission: class
+    permission-message: "&cYou don't have permission to use this command!"
+
+  heal:
+    description: Heal your Team
+    permission: heal
+    permission-message: "&cYou don't have permission to use this command!"
+
+  upgrade:
+    description: Upgrade your Power
+    permission: upgrade
+    permission-message: "&cYou don't have permission to use this command!"
+
+  playerstats:
+    description: Shows all players with player stats
+    permission: playerstats
+    permission-message: "&cYou don't have permission to use this command!"
+
+  team-colors:
+    description: Show all Team colors
+    permission: team.colors
+    permission-message: "&cYou don't have permission to use this command!"
+
+permissions:
+  teamwar:
+    description: Access to the TeamWar command
+    default: true
+  teamwar.join:
+    default: true
+  teamwar.leave:
+    default: true
+  teamwar.setbase:
+    default: true
+  teamwar.*:
+    description: Gives access to all TeamWar commands
+    default: op
+    children:
+      teamwar.create: true
+      teamwar.delete: true
+      teamwar.setspawn: true
+      teamwar.setbed: true
+      teamwar.setlobby: true
+      teamwar.lobby: true
+      teamwar.setbase: false
+      teamwar.join: false
+      teamwar.leave: false
+      teamwar.start: true
+      teamwar.stop: true
+      teamwar.status: true
+
+  playtime:
+    description: Access to the Playtime command
+    default: true
+
+  market:
+    description: Access to the Market command
+    default: true
+  market.*:
+    description: Gives access to all Market commands
+    default: op
+    children:
+      market.reload: true
+
+  eco:
+    description: Access to the Eco command
+    default: op
+  eco.*:
+    description: Gives access to all Eco commands
+    default: op
+    children:
+      eco.help: true
+      eco.give: true
+      eco.take: true
+      eco.set: true
+      eco.reload: true
+
+  pay:
+    description: Access to the Pay command
+    default: true
+
+  class:
+    description: Access to the Class command
+    default: true
+
+  heal:
+    description: Access to the Heal command
+    default: true
+
+  upgrade:
+    description: Access to the Upgrade command
+    default: true
+
+  playerstats:
+    description: Access to the Playerstats command
+    default: true
+
+  team.colors:
+    description: Access to the Team colors see
+    default: op
