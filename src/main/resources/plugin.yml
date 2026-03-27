@@ -6,7 +6,7 @@ authors: [ Niclas ]
 description: A team-based war plugin with economy, playtime limits, and lobby system.
 depend:
   - Vault
-  - Multi-Plugin
+  - PlayerManagementCore
 
 commands:
   teamwar:

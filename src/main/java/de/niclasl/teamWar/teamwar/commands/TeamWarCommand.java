@@ -1,6 +1,6 @@
 package de.niclasl.teamWar.teamwar.commands;
 
-import de.niclasl.multiPlugin.portal.api.PortalApi;
+import de.niclasl.playerManagementCore.portal.api.PortalApi;
 import de.niclasl.teamWar.TeamWar;
 import de.niclasl.teamWar.money.listener.BlockBreakRewardListener;
 import de.niclasl.teamWar.teamwar.manager.*;
