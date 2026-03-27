@@ -3,6 +3,7 @@
 Test/
 target/
 *.iml
+*.xml
 
 # Optional: temporäre Dateien
 *.log
