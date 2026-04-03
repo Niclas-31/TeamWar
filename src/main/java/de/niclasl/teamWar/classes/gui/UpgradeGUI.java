@@ -31,7 +31,7 @@ public class UpgradeGUI {
             ClassUpgrade upgrade = available.get(i);
             int level = playerUpgrades.getLevel(upgrade);
             int percent = playerUpgrades.getTotalPercent(upgrade);
-            int cost = upgrade.getCost(level);
+            int dollar = upgrade.getCost(level);
 
             ItemStack item = new ItemStack(Material.BOOK);
             ItemMeta meta = item.getItemMeta();
@@ -40,7 +40,7 @@ public class UpgradeGUI {
             meta.setDisplayName(upgrade.getDisplayName() + " §7(" + percent + "%)");
             meta.setLore(Arrays.asList(
                     "§7Next upgrade: +" + upgrade.getPercentPerLevel() + "%",
-                    "§7Cost: " + cost + " Level",
+                    "§7Cost: " + dollar + "$",
                     "§7Current level: " + level
             ));
 

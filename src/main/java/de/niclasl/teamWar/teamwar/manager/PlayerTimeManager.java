@@ -79,13 +79,24 @@ public class PlayerTimeManager implements Listener {
         int played = plugin.getConfig().getInt("playtime." + uuid, 0);
         dailyPlaySeconds.put(uuid, played);
         joinTime.put(uuid, System.currentTimeMillis());
+
+        TeamWarManager.GameState newState = GameStateManager.getGameState();
+
+        if (newState == TeamWarManager.GameState.RUNNING) {
+            startDailyTimer();
+        }
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        if (!player.isOp()) saveTime(uuid);
+
+        TeamWarManager.GameState newState = GameStateManager.getGameState();
+
+        if (newState == TeamWarManager.GameState.RUNNING) {
+            if (!player.isOp()) saveTime(uuid);
+        }
     }
 
     public static void saveTime(UUID uuid) {

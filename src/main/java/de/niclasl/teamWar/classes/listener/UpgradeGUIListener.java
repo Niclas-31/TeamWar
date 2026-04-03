@@ -1,9 +1,13 @@
 package de.niclasl.teamWar.classes.listener;
 
 import de.niclasl.teamWar.classes.ClassUpgrade;
+import de.niclasl.teamWar.classes.gui.UpgradeGUI;
 import de.niclasl.teamWar.classes.manager.PlayerUpgrades;
 import de.niclasl.teamWar.classes.manager.ClassManager;
 import de.niclasl.teamWar.classes.PlayerClass;
+import de.niclasl.teamWar.money.manager.MoneyManager;
+import de.niclasl.teamWar.teamwar.manager.TeamManager;
+import de.niclasl.teamWar.teamwar.scoreboard.Team;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +27,15 @@ public class UpgradeGUIListener implements Listener {
         if (!event.getView().getTitle().startsWith("§6Upgrades: ")) return;
 
         event.setCancelled(true);
+
+        Team team = TeamManager.getTeam(player.getUniqueId());
+        String teamName;
+        try {
+            assert team != null;
+            teamName = team.getName();
+        } catch (NullPointerException ignored) {
+            return;
+        }
 
         ItemStack clicked = event.getCurrentItem();
         if (clicked == null || !clicked.hasItemMeta()) return;
@@ -49,13 +62,13 @@ public class UpgradeGUIListener implements Listener {
             return;
         }
 
-        int playerLevel = player.getLevel();
-        if (playerLevel < cost) {
-            player.sendMessage("§cYou need " + cost + " levels to upgrade!");
+        double dollar = MoneyManager.getTeamMoney(teamName);
+        if (dollar < cost) {
+            player.sendMessage("§cYou need " + cost + " dollar to upgrade!");
             return;
         }
 
-        player.setLevel(playerLevel - cost);
+        MoneyManager.setTeamMoney(teamName, dollar - cost);
 
         upgrades.upgrade(upgrade);
         PlayerUpgrades.saveUpgrades(upgrades);
@@ -68,7 +81,6 @@ public class UpgradeGUIListener implements Listener {
 
         player.sendMessage("§aUpgrade " + upgrade.getDisplayName() + " to level " + upgrades.getLevel(upgrade) + " purchased!");
 
-
-        player.closeInventory();
+        UpgradeGUI.open(player, upgrades);
     }
 }

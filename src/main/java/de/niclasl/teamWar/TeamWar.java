@@ -143,7 +143,6 @@ public class TeamWar extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("team-colors")).setExecutor(new TeamColorsCommand());
         Objects.requireNonNull(getCommand("team-colors")).setTabCompleter(new TeamColorsCommand());
 
-        PlayerTimeManager.startDailyTimer();
         getLogger().info("TeamWar enabled");
     }
 
