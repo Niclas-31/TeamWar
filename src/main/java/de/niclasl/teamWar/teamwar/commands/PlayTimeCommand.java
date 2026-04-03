@@ -15,6 +15,12 @@ import java.util.stream.Collectors;
 
 public class PlayTimeCommand implements CommandExecutor, TabCompleter {
 
+    private final PlayerTimeManager playerTimeManager;
+
+    public PlayTimeCommand(PlayerTimeManager playerTimeManager) {
+        this.playerTimeManager = playerTimeManager;
+    }
+
     @Override
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, String @NonNull [] args) {
 
@@ -29,7 +35,7 @@ public class PlayTimeCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 0) {
-            long seconds = PlayerTimeManager.getDailyPlayTime(player.getUniqueId());
+            long seconds = playerTimeManager.getDailyPlayTime(player.getUniqueId());
             sender.sendMessage(ChatColor.GREEN + "Your playing time today: " + formatTime(seconds));
             return true;
         }
@@ -41,7 +47,7 @@ public class PlayTimeCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            long seconds = PlayerTimeManager.getDailyPlayTime(target.getUniqueId());
+            long seconds = playerTimeManager.getDailyPlayTime(target.getUniqueId());
             sender.sendMessage(ChatColor.YELLOW + target.getName() + ChatColor.GREEN + " today's game time: " + formatTime(seconds));
             return true;
         }

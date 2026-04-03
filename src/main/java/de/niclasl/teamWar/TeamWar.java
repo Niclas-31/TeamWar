@@ -3,26 +3,23 @@ package de.niclasl.teamWar;
 import de.niclasl.teamWar.classes.PlayerClass;
 import de.niclasl.teamWar.classes.command.ClassCommand;
 import de.niclasl.teamWar.classes.command.HealCommand;
-import de.niclasl.teamWar.classes.manager.PlayerUpgrades;
 import de.niclasl.teamWar.classes.command.UpgradeCommand;
 import de.niclasl.teamWar.classes.listener.UpgradeGUIListener;
 import de.niclasl.teamWar.classes.manager.ClassManager;
+import de.niclasl.teamWar.classes.manager.PlayerUpgrades;
 import de.niclasl.teamWar.enviroment.EnvironmentManager;
-import de.niclasl.teamWar.market.command.MarketCommand;
 import de.niclasl.teamWar.money.TeamWarEconomy;
 import de.niclasl.teamWar.money.command.MoneyCommand;
 import de.niclasl.teamWar.money.command.PayCommand;
+import de.niclasl.teamWar.money.listener.BlockBreakRewardListener;
+import de.niclasl.teamWar.money.manager.MoneyManager;
+import de.niclasl.teamWar.scoreboard.TeamWarScoreboard;
 import de.niclasl.teamWar.teamwar.commands.PlayTimeCommand;
 import de.niclasl.teamWar.teamwar.commands.PlayerStatsCommand;
 import de.niclasl.teamWar.teamwar.commands.TeamColorsCommand;
 import de.niclasl.teamWar.teamwar.commands.TeamWarCommand;
-import de.niclasl.teamWar.market.gui.MarketMainGui;
-import de.niclasl.teamWar.market.manager.MarketManager;
-import de.niclasl.teamWar.money.manager.MoneyManager;
 import de.niclasl.teamWar.teamwar.listener.*;
 import de.niclasl.teamWar.teamwar.manager.*;
-import de.niclasl.teamWar.scoreboard.TeamWarScoreboard;
-import de.niclasl.teamWar.money.listener.BlockBreakRewardListener;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,7 +31,10 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 public class TeamWar extends JavaPlugin implements Listener {
 
@@ -44,7 +44,6 @@ public class TeamWar extends JavaPlugin implements Listener {
     private final LobbyManager lobbyManager = new LobbyManager(this);
     private final BorderManager borderManager = new BorderManager(this);
     private final PlayerTimeManager playerTimeManager = new PlayerTimeManager(7200, this);
-    private final MarketManager marketManager = new MarketManager(this);
 
     private boolean scoreboardLayout = true;
 
@@ -98,8 +97,6 @@ public class TeamWar extends JavaPlugin implements Listener {
 
         PvPManager.init(this);
 
-        MarketMainGui marketMainGui = new MarketMainGui(this, marketManager);
-
         scoreboard = new TeamWarScoreboard(this);
         EnvironmentManager.startEnvironmentTask();
 
@@ -113,7 +110,6 @@ public class TeamWar extends JavaPlugin implements Listener {
 
         Map<UUID, Integer> dailyPlaySeconds = new HashMap<>();
 
-        getServer().getPluginManager().registerEvents(marketMainGui, this);
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(gameStateManager, dailyPlaySeconds, this), this);
         getServer().getPluginManager().registerEvents(new EntityDamageListener(), this);
@@ -130,10 +126,8 @@ public class TeamWar extends JavaPlugin implements Listener {
 
         Objects.requireNonNull(getCommand("teamwar")).setExecutor(new TeamWarCommand(teamManager, gameStateManager, bedManager, this));
         Objects.requireNonNull(getCommand("teamwar")).setTabCompleter(new TeamWarCommand(teamManager, gameStateManager, bedManager, this));
-        Objects.requireNonNull(getCommand("playtime")).setExecutor(new PlayTimeCommand());
-        Objects.requireNonNull(getCommand("playtime")).setTabCompleter(new PlayTimeCommand());
-        Objects.requireNonNull(getCommand("market")).setExecutor(new MarketCommand(marketManager));
-        Objects.requireNonNull(getCommand("market")).setTabCompleter(new MarketCommand(marketManager));
+        Objects.requireNonNull(getCommand("playtime")).setExecutor(new PlayTimeCommand(playerTimeManager));
+        Objects.requireNonNull(getCommand("playtime")).setTabCompleter(new PlayTimeCommand(playerTimeManager));
         Objects.requireNonNull(getCommand("money")).setExecutor(new MoneyCommand(moneyManager));
         Objects.requireNonNull(getCommand("money")).setTabCompleter(new MoneyCommand(moneyManager));
         Objects.requireNonNull(getCommand("pay")).setExecutor(new PayCommand());
@@ -237,9 +231,5 @@ public class TeamWar extends JavaPlugin implements Listener {
 
     public BorderManager getBorderManager() {
         return borderManager;
-    }
-
-    public MarketManager getMarketManager() {
-        return marketManager;
     }
 }

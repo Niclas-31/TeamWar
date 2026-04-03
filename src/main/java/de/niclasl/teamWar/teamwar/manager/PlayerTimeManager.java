@@ -119,7 +119,7 @@ public class PlayerTimeManager implements Listener {
         if (timerTask != null && !timerTask.isCancelled()) timerTask.cancel();
     }
 
-    public static int getDailyPlayTime(UUID uuid) {
+    public int getDailyPlayTime(UUID uuid) {
         return dailyPlaySeconds.getOrDefault(uuid, 0);
     }
 }

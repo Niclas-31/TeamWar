@@ -21,11 +21,6 @@ commands:
     aliases: [pt, ptime]
     permission-message: "&cYou don't have permission to use this command!"
 
-  market:
-    description: Open a market GUI.
-    permission: market
-    permission-message: "&cYou don't have permission to use this command!"
-
   money:
     description: Economy management
     permission: eco
@@ -92,15 +87,6 @@ permissions:
   playtime:
     description: Access to the Playtime command
     default: true
-
-  market:
-    description: Access to the Market command
-    default: true
-  market.*:
-    description: Gives access to all Market commands
-    default: op
-    children:
-      market.reload: true
 
   eco:
     description: Access to the Eco command
