@@ -81,7 +81,7 @@ public class StrengthManager {
     }
 
     private static int getEnchantmentBonus(Enchantment ench, int level) {
-        return switch (ench.getKey().getKey()) {
+        return switch (ench.getKeyOrThrow().getKey()) {
             case "sharpness", "smite", "bane_of_arthropods", "power", "protection", "fire_protection",
                  "projectile_protection", "blast_protection" -> 2 * level;
             case "infinity", "flame" -> 3 ;

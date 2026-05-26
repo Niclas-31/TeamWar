@@ -120,7 +120,7 @@ public class BedManager {
             if (TeamManager.getPlayerTeams().get(uuid).equalsIgnoreCase(teamName)) {
                 Player p = Bukkit.getPlayer(uuid);
                 if (p != null && p.isOnline()) {
-                    p.setBedSpawnLocation(null);
+                    p.setRespawnLocation(null);
                 }
             }
         }

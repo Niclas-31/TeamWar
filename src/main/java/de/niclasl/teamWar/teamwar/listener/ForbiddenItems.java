@@ -34,7 +34,7 @@ public class ForbiddenItems implements Listener {
                         if (level > ench.getMaxLevel()) {
                             item.removeEnchantment(ench);
                             item.addEnchantment(ench, ench.getMaxLevel());
-                            player.sendMessage("§cInvalid enchantment removed: " + ench.getKey().getKey());
+                            player.sendMessage("§cInvalid enchantment removed: " + ench.getKeyOrThrow().getKey());
                         }
                     });
                 }

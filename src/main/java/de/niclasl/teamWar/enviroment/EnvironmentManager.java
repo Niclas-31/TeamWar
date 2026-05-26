@@ -3,6 +3,7 @@ package de.niclasl.teamWar.enviroment;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -71,22 +72,22 @@ public class EnvironmentManager implements Listener {
     }
 
     private static void applyBiomeEffects(Player player) {
-        org.bukkit.block.Biome biome = player.getLocation().getBlock().getBiome();
+        Biome biome = player.getLocation().getBlock().getBiome();
 
-        if (biome == org.bukkit.block.Biome.SNOWY_PLAINS ||
-                biome == org.bukkit.block.Biome.ICE_SPIKES ||
-                biome == org.bukkit.block.Biome.FROZEN_PEAKS ||
-                biome == org.bukkit.block.Biome.GROVE) {
+        if (biome == Biome.SNOWY_PLAINS ||
+                biome == Biome.ICE_SPIKES ||
+                biome == Biome.FROZEN_PEAKS ||
+                biome == Biome.GROVE) {
             applySnowEffects(player);
         }
-        else if (biome == org.bukkit.block.Biome.DESERT ||
-                biome == org.bukkit.block.Biome.BADLANDS ||
-                biome == org.bukkit.block.Biome.SAVANNA) {
+        else if (biome == Biome.DESERT ||
+                biome == Biome.BADLANDS ||
+                biome == Biome.SAVANNA) {
             applyDesertEffects(player);
         }
-        else if (biome == org.bukkit.block.Biome.JUNGLE ||
-                biome == org.bukkit.block.Biome.BAMBOO_JUNGLE ||
-                biome == org.bukkit.block.Biome.SPARSE_JUNGLE) {
+        else if (biome == Biome.JUNGLE ||
+                biome == Biome.BAMBOO_JUNGLE ||
+                biome == Biome.SPARSE_JUNGLE) {
             applyJungleEffects(player);
         }
     }
@@ -108,7 +109,6 @@ public class EnvironmentManager implements Listener {
     }
 
     private static void applyThunderEffects(Player player) {
-        // Sturm -> Aggressiver Nahkampf
         player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 120, 0, true, false));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 120, 0, true, false));
     }

@@ -70,7 +70,7 @@ public class TeamManager {
             teamsFolder.mkdirs();
         }
 
-        File[] files = teamsFolder.listFiles((dir, name) -> name.endsWith(".yml"));
+        File[] files = teamsFolder.listFiles((_, name) -> name.endsWith(".yml"));
         if (files == null) return;
 
         for (File file : files) {
