@@ -1,0 +1,75 @@
+{
+  "pack": {
+    "description": "TeamWar Resource and Data",
+    "min_format": 107,
+    "max_format": 107
+  },
+  "filter": {
+    "block": [
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/black_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/blue_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/brown_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/cyan_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/gray_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/green_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/light_blue_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/light_gray_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/lime_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/magenta_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/orange_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/pink_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/purple_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/red_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/white_bed"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "loot_table/blocks/yellow_bed"
+      }
+    ]
+  }
+}

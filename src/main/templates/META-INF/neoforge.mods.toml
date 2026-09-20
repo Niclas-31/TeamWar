@@ -21,7 +21,7 @@ version = "${mod_version}" #mandatory
 # A display name for the mod
 displayName = "${mod_name}" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://docs.neoforge.net/docs/misc/updatechecker/
-updateJSONURL = "https://raw.githubusercontent.com/Niclas-31/TeamWar/main/update" #optional
+updateJSONURL = "https://raw.githubusercontent.com/Niclas-31/TeamWar/main/updates.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL = "https://github.com/Niclas-31/TeamWar" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
