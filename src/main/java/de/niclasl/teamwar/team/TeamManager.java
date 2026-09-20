@@ -4,6 +4,7 @@ import de.niclasl.teamwar.TeamWar;
 import de.niclasl.teamwar.classes.ClassManager;
 import de.niclasl.teamwar.classes.PlayerClass;
 import de.niclasl.teamwar.classes.PlayerUpgrades;
+import de.niclasl.teamwar.event.TabPrefixManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -191,6 +192,12 @@ public class TeamManager {
 
         String key = teamName.toLowerCase(Locale.ROOT);
 
+        ServerPlayer player = server.getPlayerList().getPlayer(playerUUID);
+
+        if (player == null) {
+            return;
+        }
+
         Team team = data.teams.get(key);
 
         if (team == null) {
@@ -223,6 +230,8 @@ public class TeamManager {
             minecraftTeam.setPlayerPrefix(Component.literal(getTeamPrefix(key)));
         }
 
+        TabPrefixManager.refresh(player);
+
         data.setDirty();
     }
 
@@ -251,6 +260,8 @@ public class TeamManager {
             if (minecraftTeam != null) {
                 scoreboard.removePlayerFromTeam(player.getScoreboardName(), minecraftTeam);
             }
+
+            TabPrefixManager.refresh(player);
         }
 
         data.setDirty();

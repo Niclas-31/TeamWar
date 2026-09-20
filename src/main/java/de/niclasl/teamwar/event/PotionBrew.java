@@ -23,6 +23,7 @@ public class PotionBrew {
             MobEffects.INVISIBILITY,
             MobEffects.INSTANT_HEALTH,
             MobEffects.INSTANT_DAMAGE,
+            MobEffects.STRENGTH,
             MobEffects.RESISTANCE,
             MobEffects.SLOWNESS,
             MobEffects.LEVITATION,

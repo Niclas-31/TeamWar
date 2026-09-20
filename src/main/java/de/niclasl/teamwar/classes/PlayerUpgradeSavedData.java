@@ -10,6 +10,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -64,20 +65,12 @@ public class PlayerUpgradeSavedData extends SavedData {
                     continue;
                 }
 
-                ClassUpgrade upgrade = null;
-
                 try {
-                    upgrade = ClassUpgrade.valueOf(upgradeName);
+                    ClassUpgrade upgrade = ClassUpgrade.valueOf(upgradeName.toUpperCase(Locale.ROOT));
 
-                    for (int j = 0; j < level; j++) {
-                        upgrades.upgrade(upgrade);
-                    }
-
+                    upgrades.setLevel(upgrade, level);
                 } catch (IllegalArgumentException ignored) {
                 }
-
-                ClassManager classManager = TeamWar.getClassManager();
-                classManager.setUpgrade(uuid, upgrade, level);
             }
 
             playerUpgrades.put(uuid, upgrades);

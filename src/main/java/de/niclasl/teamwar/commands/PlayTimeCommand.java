@@ -1,8 +1,8 @@
 package de.niclasl.teamwar.commands;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
 import de.niclasl.teamwar.TeamWar;
 import de.niclasl.teamwar.player.PlayerManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
@@ -11,6 +11,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+
+import java.util.Collection;
 
 @EventBusSubscriber(value = Dist.DEDICATED_SERVER)
 public class PlayTimeCommand {
@@ -36,47 +38,34 @@ public class PlayTimeCommand {
                         })
                         .then(Commands.argument("players", EntityArgument.players())
                                 .executes(context -> {
-                                    ServerPlayer sender =
-                                            context.getSource()
-                                                    .getPlayerOrException();
+                                    ServerPlayer sender = context.getSource().getPlayerOrException();
 
-                                    String playerName =
-                                            StringArgumentType.getString(context, "players");
+                                    Collection<ServerPlayer> players =
+                                            EntityArgument.getPlayers(context, "players");
 
-                                    ServerPlayer target =
-                                            sender.level().getServer()
-                                                    .getPlayerList()
-                                                    .getPlayerByName(
-                                                            playerName
-                                                    );
+                                    for (ServerPlayer player : players) {
 
-                                    if (target == null) {
+                                        if (player == null) {
+                                            sender.sendSystemMessage(Component.literal("Player not found!")
+                                                    .withStyle(ChatFormatting.RED)
+                                            );
+                                            return 0;
+                                        }
+
+                                        PlayerManager playerManager = TeamWar.getPlayerManager();
+
+                                        long seconds = playerManager.getDailyPlayTime(player.getUUID());
+
                                         sender.sendSystemMessage(
                                                 Component.literal(
-                                                        "Player not found!"
+                                                        player.getName().getString()
+                                                                + " today's game time: "
+                                                                + formatTime(
+                                                                seconds
+                                                        )
                                                 )
                                         );
-                                        return 0;
                                     }
-
-                                    PlayerManager playerManager =
-                                            TeamWar.getPlayerManager();
-
-                                    long seconds =
-                                            playerManager.getDailyPlayTime(
-                                                    target.getUUID()
-                                            );
-
-                                    sender.sendSystemMessage(
-                                            Component.literal(
-                                                    target.getName()
-                                                            .getString()
-                                                            + " today's game time: "
-                                                            + formatTime(
-                                                            seconds
-                                                    )
-                                            )
-                                    );
 
                                     return 1;
                                 })

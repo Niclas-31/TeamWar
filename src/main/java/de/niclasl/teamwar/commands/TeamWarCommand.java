@@ -98,20 +98,28 @@ public class TeamWarCommand {
                                         )
                                 )
                                 .then(Commands.literal("base")
-                                        .then(Commands.argument("pos1", BlockPosArgument.blockPos())
-                                                .executes(context -> {
-                                                    BlockPos pos =
-                                                            BlockPosArgument.getBlockPos(context, "pos1");
-                                                    setBase(context.getSource(), pos, true);
-                                                    return 1;
-                                                }))
-                                        .then(Commands.argument("pos2", BlockPosArgument.blockPos())
-                                                .executes(context -> {
-                                                    BlockPos pos =
-                                                            BlockPosArgument.getBlockPos(context, "pos2");
-                                                    setBase(context.getSource(), pos, false);
-                                                    return 1;
-                                                }))
+                                        .then(Commands.literal("pos1")
+                                                .then(Commands.argument("position", BlockPosArgument.blockPos())
+                                                        .executes(context -> {
+                                                            BlockPos pos =
+                                                                    BlockPosArgument.getBlockPos(context, "position");
+
+                                                            setBase(context.getSource(), pos, true);
+                                                            return 1;
+                                                        })
+                                                )
+                                        )
+                                        .then(Commands.literal("pos2")
+                                                .then(Commands.argument("position", BlockPosArgument.blockPos())
+                                                        .executes(context -> {
+                                                            BlockPos pos =
+                                                                    BlockPosArgument.getBlockPos(context, "position");
+
+                                                            setBase(context.getSource(), pos, false);
+                                                            return 1;
+                                                        })
+                                                )
+                                        )
                                 )
                                 .then(Commands.literal("lobby")
                                         .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))

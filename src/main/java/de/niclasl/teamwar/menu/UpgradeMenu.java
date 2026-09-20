@@ -13,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -36,14 +35,29 @@ public class UpgradeMenu extends AbstractContainerMenu {
     private final MoneyManager moneyManager;
 
     public UpgradeMenu(int containerId, Inventory inventory, FriendlyByteBuf buf) {
-        this(containerId, new PlayerUpgrades(inventory.player.getUUID()));
+        super(ModMenuTypes.UPGRADE_MENU.get(), containerId);
+
+        this.playerUpgrades = new PlayerUpgrades(inventory.player.getUUID());
+        this.classManager = null;
+        this.moneyManager = null;
+
+        this.container = new SimpleContainer(9);
+
+        for (int i = 0; i < 9; i++) {
+            addSlot(new UpgradeSlot(
+                    container,
+                    i,
+                    8 + i * 18,
+                    18
+            ));
+        }
     }
 
-    public UpgradeMenu(int containerId, PlayerUpgrades playerUpgrades) {
+    public UpgradeMenu(int containerId, PlayerUpgrades playerUpgrades, ClassManager classManager) {
         super(ModMenuTypes.UPGRADE_MENU.get(), containerId);
 
         this.playerUpgrades = playerUpgrades;
-        this.classManager = TeamWar.getClassManager();
+        this.classManager = classManager;
         this.moneyManager = TeamWar.getMoneyManager();
 
         this.container = new SimpleContainer(9);
@@ -58,38 +72,6 @@ public class UpgradeMenu extends AbstractContainerMenu {
                     20
             ));
         }
-    }
-
-    public static void open(ServerPlayer player) {
-
-        ClassManager classManager = TeamWar.getClassManager();
-
-        PlayerClass playerClass = classManager.getClass(player.getUUID());
-
-        if (playerClass == null) {
-            player.sendSystemMessage(
-                    Component.literal("You don't have a class!")
-                            .withStyle(ChatFormatting.RED)
-            );
-            return;
-        }
-
-        PlayerUpgrades playerUpgrades = classManager.getUpgrades(player.getUUID(), playerClass);
-
-        if (playerUpgrades == null) {
-            return;
-        }
-
-        player.openMenu(
-                new SimpleMenuProvider(
-                        (containerId, _, ignored) ->
-                                new UpgradeMenu(
-                                        containerId,
-                                        playerUpgrades
-                                ),
-                        Component.literal("Upgrades")
-                )
-        );
     }
 
     private void setupItems() {

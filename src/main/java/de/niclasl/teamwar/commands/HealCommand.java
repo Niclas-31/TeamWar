@@ -19,6 +19,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
+import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -60,14 +61,15 @@ public class HealCommand {
         }
 
         String playerClass = team.getPlayerClass(commandPlayer.getUUID());
-        if (!"healer".equalsIgnoreCase(playerClass)) {
+        if (!"healer".toUpperCase(Locale.ROOT).equalsIgnoreCase(playerClass)) {
             commandPlayer.sendSystemMessage(Component.literal("Only healers can use this command!")
                     .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
-        PlayerUpgrades upgrades = classManager.getUpgrades(commandPlayer.getUUID(), PlayerClass.valueOf(playerClass));
+        PlayerUpgrades upgrades = classManager.getUpgrades(commandPlayer.getUUID(),
+                PlayerClass.valueOf(playerClass.toUpperCase(Locale.ROOT)));
         int healingPercent = upgrades.getTotalPercent(ClassUpgrade.HEALING);
 
         float baseHeal = 8.0F;
