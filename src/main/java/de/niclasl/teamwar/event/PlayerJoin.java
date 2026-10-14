@@ -13,7 +13,6 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.Locale;
@@ -63,7 +62,7 @@ public class PlayerJoin {
     }
 
     @SubscribeEvent
-    public static void onPlayerDeath(LivingDeathEvent event) {
+    public static void onPlayerDeath(PlayerEvent.PlayerRespawnEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
@@ -119,10 +118,6 @@ public class PlayerJoin {
         player.setGameMode(GameType.SPECTATOR);
 
         player.getInventory().clearContent();
-
-        player.getAbilities().mayfly = true;
-        player.getAbilities().flying = true;
-        player.onUpdateAbilities();
 
         player.setHealth(player.getMaxHealth());
         player.getFoodData().setFoodLevel(20);

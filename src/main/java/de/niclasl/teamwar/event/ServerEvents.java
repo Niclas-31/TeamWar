@@ -1,6 +1,7 @@
 package de.niclasl.teamwar.event;
 
 import de.niclasl.teamwar.TeamWar;
+import de.niclasl.teamwar.api.events.ScheduledEventsSavedData;
 import de.niclasl.teamwar.bed.BedSavedData;
 import de.niclasl.teamwar.classes.PlayerUpgradeSavedData;
 import de.niclasl.teamwar.economy.MoneySavedData;
@@ -8,18 +9,24 @@ import de.niclasl.teamwar.game.GameManager;
 import de.niclasl.teamwar.game.GameSavedData;
 import de.niclasl.teamwar.game.GameState;
 import de.niclasl.teamwar.lobby.LobbyManager;
+import de.niclasl.teamwar.network.SyncCalendarPayload;
 import de.niclasl.teamwar.player.PlayerManager;
 import de.niclasl.teamwar.player.PlayerSavedData;
 import de.niclasl.teamwar.scoreboard.TeamWarScoreboard;
+import de.niclasl.teamwar.team.TeamManager;
 import de.niclasl.teamwar.team.TeamSavedData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = TeamWar.MOD_ID, value = Dist.DEDICATED_SERVER)
 public class ServerEvents {
@@ -30,9 +37,25 @@ public class ServerEvents {
             return;
         }
 
+        ServerLevel level = player.level();
+
+        ScheduledEventsSavedData events = ScheduledEventsSavedData.get(level.getServer().overworld());
+
+        PacketDistributor.sendToPlayer(
+                player,
+                new SyncCalendarPayload(events.getCalendarEventData())
+        );
+
         PlayerManager playerManager = TeamWar.getPlayerManager();
         LobbyManager lobbyManager = TeamWar.getLobbyManager();
         TeamWarScoreboard scoreboard = TeamWar.getScoreboard();
+        TeamManager teamManager = TeamWar.getTeamManager();
+
+        if (teamManager.containsViewers(player.getUUID())) {
+            player.setGameMode(GameType.SPECTATOR);
+        } else {
+            player.setGameMode(GameType.SURVIVAL);
+        }
 
         playerManager.playerJoin(player);
 
@@ -109,6 +132,40 @@ public class ServerEvents {
         if (team.isDirty()) {
             level.getDataStorage().saveAndJoin();
             team.setDirty(false);
+        }
+
+        ScheduledEventsSavedData events = ScheduledEventsSavedData.get(level.getServer().overworld());
+
+        if (events.isDirty()) {
+            level.getDataStorage().saveAndJoin();
+            PacketDistributor.sendToAllPlayers(
+                    new SyncCalendarPayload(events.getCalendarEventData())
+            );
+            events.setDirty(false);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onDimensionChange(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getTo() == Level.END) {
+            ServerPlayer player = (ServerPlayer) event.getEntity();
+
+            LobbyManager lobbyManager = TeamWar.getLobbyManager();
+
+            lobbyManager.teleportToLobby(player);
+
+            var advancements = player.getAdvancements();
+            var advancement = player.level().getServer()
+                    .getAdvancements()
+                    .get(Identifier.withDefaultNamespace("end/root"));
+
+            if (advancement != null) {
+                var progress = advancements.getOrStartProgress(advancement);
+
+                for (String criterion : progress.getCompletedCriteria()) {
+                    advancements.revoke(advancement, criterion);
+                }
+            }
         }
     }
 }

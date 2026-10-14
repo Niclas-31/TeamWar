@@ -29,8 +29,6 @@ public class TeamWarScoreboard {
 
     private final ScheduledExecutorService scheduler;
 
-    private static final Map<UUID, Scoreboard> playerScoreboards = new HashMap<>();
-
     private boolean toggle = false;
 
     private static final ChatFormatting[] UNIQUE_COLORS = {
@@ -331,8 +329,6 @@ public class TeamWarScoreboard {
                     score
             );
         }
-
-        playerScoreboards.put(player.getUUID(), scoreboard);
     }
 
     private static void addLine(
@@ -444,10 +440,6 @@ public class TeamWarScoreboard {
         for (PlayerScoreEntry entry : scoreboard.listPlayerScores(objective)) {
             scoreboard.resetAllPlayerScores(new SidebarScoreHolder(entry.owner()));
         }
-    }
-
-    public static Scoreboard getPlayerScoreboard(ServerPlayer player) {
-        return playerScoreboards.get(player.getUUID());
     }
 
     private record SidebarScoreHolder(String name) implements ScoreHolder {
