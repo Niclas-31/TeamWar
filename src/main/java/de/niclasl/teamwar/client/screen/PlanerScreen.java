@@ -11,7 +11,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
@@ -40,9 +39,8 @@ public class PlanerScreen extends Screen {
     int fieldWidth = 220;
     int fieldX = centerX - fieldWidth / 2;
 
-    List<Identifier> eventTypes = Events.EVENTS.getEntries()
+    List<Identifier> eventTypes = Events.EVENTS.ids()
             .stream()
-            .map(DeferredHolder::getId)
             .toList();
 
     if (!eventTypes.isEmpty()) {
