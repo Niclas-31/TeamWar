@@ -34,12 +34,6 @@ public abstract class Event {
         return savedData.getEvent(id);
     }
 
-    public Instant getStartTime() {
-        PlannedEventEntry data = getData();
-
-        return data == null ? null : Instant.ofEpochMilli(data.getStartTime());
-    }
-
     public Instant getEndTime() {
         PlannedEventEntry data = getData();
 
