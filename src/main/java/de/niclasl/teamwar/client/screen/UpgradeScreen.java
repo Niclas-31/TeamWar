@@ -1,4 +1,4 @@
-package de.niclasl.teamwar.client;
+package de.niclasl.teamwar.client.screen;
 
 import de.niclasl.teamwar.TeamWar;
 import de.niclasl.teamwar.menu.UpgradeMenu;

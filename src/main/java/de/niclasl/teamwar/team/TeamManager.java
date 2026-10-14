@@ -289,6 +289,20 @@ public class TeamManager {
         return data.teams.values().toArray(new Team[0]);
     }
 
+    public void addViewers(UUID viewers) {
+        data.viewers.add(viewers);
+        data.setDirty();
+    }
+
+    public void removeViewers(UUID viewers) {
+        data.viewers.remove(viewers);
+        data.setDirty();
+    }
+
+    public boolean containsViewers(UUID uuid) {
+        return data.viewers.contains(uuid);
+    }
+
     public static String getTeamPrefix(String teamName) {
         return switch (teamName.toLowerCase()) {
             case "black" -> ChatFormatting.BLACK + "[Black] " + ChatFormatting.RESET;

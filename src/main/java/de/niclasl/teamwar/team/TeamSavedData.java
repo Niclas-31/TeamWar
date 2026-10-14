@@ -13,9 +13,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import org.jspecify.annotations.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class TeamSavedData extends SavedData {
 
@@ -43,8 +41,11 @@ public class TeamSavedData extends SavedData {
 
     public final Map<UUID, PlayerClass> playerClasses = new HashMap<>();
 
+    public final Set<UUID> viewers = new HashSet<>();
+
     public void read(CompoundTag tag) {
         teams.clear();
+        viewers.clear();
 
         CompoundTag teamsTag = tag.getCompoundOrEmpty("teams");
 
@@ -124,6 +125,18 @@ public class TeamSavedData extends SavedData {
 
             teams.put(teamId, team);
         }
+
+        CompoundTag viewer = tag.getCompoundOrEmpty("viewer");
+
+        for (String viewerId : viewer.keySet()) {
+            String uuidString = viewer.getStringOr(viewerId, "");
+
+            try {
+                UUID uuid = UUID.fromString(uuidString);
+                viewers.add(uuid);
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
     }
 
     public CompoundTag write(CompoundTag tag) {
@@ -182,6 +195,14 @@ public class TeamSavedData extends SavedData {
         }
 
         tag.put("teams", teamsTag);
+
+        CompoundTag viewers = new CompoundTag();
+
+        for (UUID uuid : this.viewers) {
+            viewers.putString(uuid.toString(), uuid.toString());
+        }
+
+        tag.put("viewer", viewers);
 
         return tag;
     }

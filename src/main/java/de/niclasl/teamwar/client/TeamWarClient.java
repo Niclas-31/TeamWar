@@ -1,6 +1,7 @@
 package de.niclasl.teamwar.client;
 
 import de.niclasl.teamwar.TeamWar;
+import de.niclasl.teamwar.client.screen.UpgradeScreen;
 import de.niclasl.teamwar.menu.ModMenuTypes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;

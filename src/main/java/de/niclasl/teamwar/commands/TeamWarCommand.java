@@ -17,6 +17,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.TeamArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
@@ -159,6 +160,27 @@ public class TeamWarCommand {
                                     leave(context.getSource());
                                     return 1;
                                 }))
+                        .then(Commands.literal("viewer")
+                                .then(Commands.literal("add")
+                                        .then(Commands.argument("player", EntityArgument.player())
+                                                .executes(ctx -> {
+                                                    ServerPlayer player =
+                                                            EntityArgument.getPlayer(ctx, "player");
+                                                    viewer(player, true);
+                                                    return 1;
+                                                })
+                                        )
+                                )
+                                .then(Commands.literal("remove")
+                                        .then(Commands.argument("player", EntityArgument.player())
+                                                .executes(ctx -> {
+                                                    ServerPlayer player =
+                                                            EntityArgument.getPlayer(ctx, "player");
+                                                    viewer(player, false);
+                                                    return 1;
+                                                })
+                                        ))
+                        )
                         .then(Commands.literal("start")
                                 .requires(Commands.hasPermission(Commands.LEVEL_OWNERS))
                                 .executes(context -> {
@@ -490,6 +512,16 @@ public class TeamWarCommand {
         player.sendSystemMessage(Component.literal("You left your team")
                 .withStyle(ChatFormatting.GREEN)
         );
+    }
+
+    private static void viewer(ServerPlayer player, boolean add) {
+        TeamManager teamManager = TeamWar.getTeamManager();
+
+        if (add) {
+            teamManager.addViewers(player.getUUID());
+        } else {
+            teamManager.removeViewers(player.getUUID());
+        }
     }
 
     private static void start(CommandSourceStack source) {
