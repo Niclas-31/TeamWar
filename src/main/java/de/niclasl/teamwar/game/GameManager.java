@@ -57,10 +57,8 @@ public class GameManager {
         playerManager.resetDailyTimes();
 
         server.getPlayerList().broadcastSystemMessage(
-                Component.literal(
-                        "It is now day " + currentDay +
-                                " of week " + currentWeek + "."
-                ).withStyle(ChatFormatting.YELLOW),
+                Component.translatable("message.game.day_of_week", currentDay, currentWeek)
+                        .withStyle(ChatFormatting.YELLOW),
                 false
         );
     }
@@ -70,9 +68,8 @@ public class GameManager {
         TeamWar.LOGGER.info("Week advanced to {}", currentWeek);
 
         server.getPlayerList().broadcastSystemMessage(
-                Component.literal(
-                        "Week " + currentWeek + "has started!"
-                ).withStyle(ChatFormatting.YELLOW),
+                Component.translatable("message.game.week", currentWeek)
+                        .withStyle(ChatFormatting.YELLOW),
                 false
         );
     }

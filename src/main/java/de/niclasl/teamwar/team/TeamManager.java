@@ -68,12 +68,8 @@ public class TeamManager {
         data.setDirty();
 
         server.getPlayerList().broadcastSystemMessage(
-                Component.literal(
-                        "The spawn point for team "
-                                + teamName
-                                + " has been set!"
-                ).withStyle(ChatFormatting.GREEN), false
-        );
+                Component.translatable("message.team.spawn.set", teamName)
+                        .withStyle(ChatFormatting.GREEN), false);
     }
 
     public void setPlayerClass(ServerPlayer player, PlayerClass playerClass) {

@@ -63,8 +63,7 @@ public class PlayerManager {
 
             if (played >= maxDailySeconds) {
                 saveTime(uuid);
-                player.connection.disconnect(
-                        Component.literal( "You have reached your daily playtime limit!" ));
+                player.connection.disconnect(Component.translatable( "message.playtime.is_reached"));
                 continue;
             }
 
@@ -84,11 +83,8 @@ public class PlayerManager {
             int remaining = Math.max(0, maxDailySeconds - currentPlayTime);
 
             player.sendSystemMessage(
-                    Component.literal(
-                            "Daily Playtime left: "
-                                    + formatTime(remaining)
-                    ), true
-            );
+                    Component.translatable("message.playtime.daily",
+                            formatTime(remaining)), true);
 
             if (currentPlayTime > 0 && currentPlayTime % 60 == 0) {
                 saveTime(uuid);

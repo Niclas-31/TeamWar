@@ -88,8 +88,8 @@ public class BlockBreak {
                 event.setCanceled(true);
 
                 player.sendSystemMessage(
-                        Component.literal(
-                                "You can't destroy your own bed!"
+                        Component.translatable(
+                                "message.team.cant_destroy_bed"
                         ).withStyle(ChatFormatting.RED)
                 );
 
@@ -98,10 +98,8 @@ public class BlockBreak {
                 event.setCanceled(false);
 
                 player.level().getServer().getPlayerList().broadcastSystemMessage(
-                        Component.literal(
-                                "Team " + teamName
-                                        + "'s bed has been destroyed!"
-                        ).withStyle(ChatFormatting.RED),
+                        Component.translatable("message.team.destroyed_bed", teamName)
+                                .withStyle(ChatFormatting.RED),
                         false
                 );
 

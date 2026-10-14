@@ -24,14 +24,14 @@ public class Blocker {
         if (type == Blocks.RESPAWN_ANCHOR) {
             event.setCanceled(true);
             if (event.getEntity() instanceof ServerPlayer player) {
-                player.sendSystemMessage(Component.literal("Respawn Anchors are disabled!")
+                player.sendSystemMessage(Component.translatable("message.game.respawn_anchor_disabled")
                         .withStyle(ChatFormatting.RED)
                 );
             }
         } else if (type == Blocks.TNT) {
             event.setCanceled(true);
             if (event.getEntity() instanceof ServerPlayer player) {
-                player.sendSystemMessage(Component.literal("TNT are disabled!")
+                player.sendSystemMessage(Component.translatable("message.game.tnt_disabled")
                         .withStyle(ChatFormatting.RED)
                 );
             }
@@ -43,7 +43,7 @@ public class Blocker {
         if (event.getItemStack().equals(new ItemStack(Items.END_CRYSTAL))) {
             event.setCanceled(true);
             if (event.getEntity() instanceof ServerPlayer player) {
-                player.sendSystemMessage(Component.literal("End Crystals are disabled!")
+                player.sendSystemMessage(Component.translatable("message.game.end_crystal_disabled")
                         .withStyle(ChatFormatting.RED)
                 );
             }
@@ -55,7 +55,7 @@ public class Blocker {
         if (event.getItemStack().equals(new ItemStack(Items.TNT_MINECART))) {
             event.setCanceled(true);
             if (event.getEntity() instanceof ServerPlayer player) {
-                player.sendSystemMessage(Component.literal("TNT Minecarts are disabled!")
+                player.sendSystemMessage(Component.translatable("message.game.tnt_minecart_disabled")
                         .withStyle(ChatFormatting.RED)
                 );
             }

@@ -71,9 +71,8 @@ public class ForbiddenItems {
                 item.set(DataComponents.ENCHANTMENTS, mutable.toImmutable());
 
                 player.sendSystemMessage(
-                        Component.literal(
-                                "Invalid enchantment removed: "
-                                        + enchantment.getRegisteredName()
+                        Component.translatable(
+                                "message.game.invalid_enchantment", enchantment.getRegisteredName()
                         ).withStyle(ChatFormatting.RED)
                 );
             }

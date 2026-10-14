@@ -41,21 +41,17 @@ public class PlayerJoin {
 
         if (playedSeconds >= MAX_DAILY_SECONDS) {
             player.connection.disconnect(
-                    Component.literal(
-                            "You have reached your 2 hours of playtime today!"
-                    ).withStyle(ChatFormatting.RED)
+                    Component.translatable("message.playtime.is_reached")
+                            .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         player.sendSystemMessage(
-                Component.literal(
-                        "Week "
-                                + TeamWar.getPvPManager().getCurrentWeek()
-                                + "/6  "
-                                + "Day "
-                                + TeamWar.getPvPManager().getCurrentDay()
-                                + "/7"
+                Component.translatable(
+                        "message.playtime",
+                        TeamWar.getPvPManager().getCurrentWeek(),
+                        TeamWar.getPvPManager().getCurrentDay()
                 ).withStyle(ChatFormatting.YELLOW),
                 true
         );
@@ -84,9 +80,8 @@ public class PlayerJoin {
                 setSpectator(player);
 
                 server.getPlayerList().broadcastSystemMessage(
-                        Component.literal(
-                                player.getName().getString()
-                                        + " is eliminated! (No team)"
+                        Component.translatable(
+                                "message.game.eliminated.team", player.getName().getString()
                         ).withStyle(ChatFormatting.RED),
                         false
                 );
@@ -97,9 +92,8 @@ public class PlayerJoin {
                 setSpectator(player);
 
                 server.getPlayerList().broadcastSystemMessage(
-                        Component.literal(
-                                player.getName().getString()
-                                        + " is eliminated! (Bed destroyed)"
+                        Component.translatable(
+                                "message.game.eliminated.bed", player.getName().getString()
                         ).withStyle(ChatFormatting.RED),
                         false
                 );
@@ -107,8 +101,8 @@ public class PlayerJoin {
             }
 
             player.sendSystemMessage(
-                    Component.literal(
-                            "You have respawned again!"
+                    Component.translatable(
+                            "message.game.respawned"
                     ).withStyle(ChatFormatting.GREEN)
             );
         });
@@ -123,8 +117,8 @@ public class PlayerJoin {
         player.getFoodData().setFoodLevel(20);
 
         player.sendSystemMessage(
-                Component.literal(
-                        "You are eliminated and now a spectator!"
+                Component.translatable(
+                        "message.game.spectator"
                 ).withStyle(ChatFormatting.GRAY)
         );
     }

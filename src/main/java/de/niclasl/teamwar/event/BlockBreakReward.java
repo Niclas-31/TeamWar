@@ -54,7 +54,7 @@ public class BlockBreakReward {
 
         for (Team team : teamManager.getTeams().values()) {
             if (team.isInBase(loc) && !team.getMembers().contains(player.getUUID())) {
-                player.sendSystemMessage(Component.literal("You cannot break blocks in another team's base!")
+                player.sendSystemMessage(Component.translatable("message.game.cannot_break")
                         .withStyle(ChatFormatting.RED));
                 event.setCanceled(true);
                 return;
@@ -68,8 +68,8 @@ public class BlockBreakReward {
                     String teamName = teamManager.getTeamOfPlayer(player.getUUID());
                     if (teamName != null) {
                         moneyManager.addTeamMoney(teamName, reward);
-                        player.sendSystemMessage(Component.literal(
-                                "You have received " + reward + "$ for mining " + state.getBlock() + "!")
+                        player.sendSystemMessage(Component.translatable(
+                                "message.game.money_reward", reward, state.getBlock())
                                 .withStyle(ChatFormatting.GOLD));
                     }
                 }

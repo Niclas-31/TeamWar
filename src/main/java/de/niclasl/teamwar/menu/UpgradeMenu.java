@@ -106,11 +106,11 @@ public class UpgradeMenu extends AbstractContainerMenu {
 
             List<Component> lore = new ArrayList<>();
 
-            lore.add(Component.literal("Level: " + level));
+            lore.add(Component.translatable("gui.teamwar.upgrade.level", level));
 
-            lore.add(Component.literal("Next: +" + upgrade.getPercentPerLevel() + "%"));
+            lore.add(Component.translatable("gui.teamwar.upgrade.next", upgrade.getPercentPerLevel()));
 
-            lore.add(Component.literal("Cost: " + MoneyManager.formatMoney(upgrade.getCost(level))));
+            lore.add(Component.translatable("gui.teamwar.upgrade.cost", MoneyManager.formatMoney(upgrade.getCost(level))));
 
             stack.set(DataComponents.LORE, new ItemLore(lore));
 
@@ -160,7 +160,7 @@ public class UpgradeMenu extends AbstractContainerMenu {
 
         if (totalPercent >= 100) {
 
-            player.sendSystemMessage(Component.literal("This upgrade is already at maximum (100%)!")
+            player.sendSystemMessage(Component.translatable("message.upgrade.maximum")
                     .withStyle(ChatFormatting.GREEN)
             );
 
@@ -171,7 +171,7 @@ public class UpgradeMenu extends AbstractContainerMenu {
 
         if (teamName == null) {
 
-            player.sendSystemMessage(Component.literal("You are not in a team!")
+            player.sendSystemMessage(Component.translatable("message.not_in_team")
                     .withStyle(ChatFormatting.RED)
             );
 
@@ -182,7 +182,7 @@ public class UpgradeMenu extends AbstractContainerMenu {
 
         if (money < cost) {
 
-            player.sendSystemMessage(Component.literal("You need " + cost + " dollar to upgrade!"));
+            player.sendSystemMessage(Component.translatable("message.upgrade.deny", cost));
 
             return;
         }
@@ -206,12 +206,11 @@ public class UpgradeMenu extends AbstractContainerMenu {
         }
 
         player.sendSystemMessage(
-                Component.literal(
-                        "Upgrade "
-                                + upgrade.getDisplayName()
-                                + " to level "
-                                + playerUpgrades.getLevel(upgrade)
-                                + " purchased!"
+                Component.translatable(
+                        "message.upgrade.successful",
+                        upgrade.getDisplayName(),
+                        playerUpgrades.getLevel(upgrade
+                        )
                 )
         );
 

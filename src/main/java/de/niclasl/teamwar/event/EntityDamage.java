@@ -53,8 +53,8 @@ public class EntityDamage {
         if (!pvpManager.isPvpAllowed()) {
             event.setNewDamage(0.0F);
 
-            attacker.sendSystemMessage(Component.literal(
-                    "§cPvP is disabled for the first " + pvpManager.getMaxWeeks() + " weeks!")
+            attacker.sendSystemMessage(Component.translatable(
+                    "message.game.pvp_disabled", pvpManager.getMaxWeeks())
                     .withStyle(ChatFormatting.RED)
             );
             return;

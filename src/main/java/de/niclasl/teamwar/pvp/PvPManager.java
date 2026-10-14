@@ -86,10 +86,8 @@ public class PvPManager {
 
             if (data.currentWeek >= maxWeeks) {
 
-                broadcast(
-                        Component.literal("PvP is now enabled!")
-                                .withStyle(ChatFormatting.RED)
-                );
+                broadcast(Component.translatable("message.pvp.is_now_enabled")
+                        .withStyle(ChatFormatting.RED));
 
                 stopWeekCounter();
             }
@@ -139,7 +137,7 @@ public class PvPManager {
 
         long millis = getMillisUntilPvp();
 
-        if (millis <= 0) return "PvP enabled";
+        if (millis <= 0) return Component.translatable("message.pvp.is_enabled").getString();
 
         long seconds = millis / 1000;
         long minutes = seconds / 60;

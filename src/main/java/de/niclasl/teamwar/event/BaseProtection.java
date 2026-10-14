@@ -37,7 +37,7 @@ public class BaseProtection {
                 }
 
                 event.setCanceled(true);
-                player.sendSystemMessage(Component.literal("You are not allowed to mine anything here!")
+                player.sendSystemMessage(Component.translatable("message.team.cannot_break")
                         .withStyle(ChatFormatting.RED));
                 return;
             }
@@ -61,7 +61,7 @@ public class BaseProtection {
             if (team.isInBase(event.getPos())) {
                 if (team.equals(playerTeam)) return;
                 event.setCanceled(true);
-                player.sendSystemMessage(Component.literal("You are not allowed to build anything here!")
+                player.sendSystemMessage(Component.translatable("message.team.cannot_build")
                         .withStyle(ChatFormatting.RED));
                 return;
             }

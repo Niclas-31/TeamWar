@@ -52,7 +52,7 @@ public class ScheduledEventsSavedData extends SavedData {
         events.put(id, event);
       } catch (IllegalArgumentException exception) {
         TeamWar.LOGGER.error(
-                "Ungültige Event-ID beim Laden: {}", key, exception
+                "Invalid event ID during loading: {}", key
         );
       }
     }
