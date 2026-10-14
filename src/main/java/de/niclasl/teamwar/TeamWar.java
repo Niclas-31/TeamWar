@@ -1,6 +1,8 @@
 package de.niclasl.teamwar;
 
 import com.mojang.logging.LogUtils;
+import de.niclasl.teamwar.api.events.EventScheduler;
+import de.niclasl.teamwar.api.events.Events;
 import de.niclasl.teamwar.bed.BedManager;
 import de.niclasl.teamwar.border.BorderManager;
 import de.niclasl.teamwar.classes.ClassManager;
@@ -8,17 +10,18 @@ import de.niclasl.teamwar.economy.MoneyManager;
 import de.niclasl.teamwar.game.GameManager;
 import de.niclasl.teamwar.lobby.LobbyManager;
 import de.niclasl.teamwar.menu.ModMenuTypes;
+import de.niclasl.teamwar.network.ModNetwork;
 import de.niclasl.teamwar.player.PlayerManager;
 import de.niclasl.teamwar.pvp.PvPManager;
 import de.niclasl.teamwar.scoreboard.TeamWarScoreboard;
 import de.niclasl.teamwar.strength.StrengthManager;
 import de.niclasl.teamwar.team.TeamManager;
+import de.niclasl.teamwar.worldgen.biome_source.ModBiomeSource;
+import de.niclasl.teamwar.worldgen.density.IslandDensityFunction;
 import net.minecraft.server.MinecraftServer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
@@ -41,13 +44,20 @@ public class TeamWar {
     private static TeamWarScoreboard scoreboard;
     private static MoneyManager moneyManager;
 
-    public TeamWar(IEventBus modEventBus, ModContainer modContainer) {
+    public TeamWar(IEventBus modEventBus) {
+        modEventBus.addListener(ModNetwork::register);
 
         NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.addListener(EventScheduler::onServerTick);
+
+        IslandDensityFunction.REGISTER.register(modEventBus);
+        IslandDensityFunction.init();
+        ModBiomeSource.REGISTER.register(modEventBus);
+        ModBiomeSource.init();
+
+        Events.register();
 
         ModMenuTypes.register(modEventBus);
-
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     @SubscribeEvent

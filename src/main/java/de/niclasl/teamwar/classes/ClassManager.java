@@ -12,17 +12,6 @@ public class ClassManager {
         this.data = PlayerUpgradeSavedData.get(server.overworld());
     }
 
-    public void setUpgrade(UUID uuid, ClassUpgrade upgrade, int level) {
-        PlayerUpgrades playerUpgrades = data.playerUpgrades.get(uuid);
-
-        if (playerUpgrades == null) {
-            return;
-        }
-
-        playerUpgrades.setLevel(upgrade, level);
-        data.setDirty();
-    }
-
     public PlayerUpgrades getUpgrades(UUID uuid, PlayerClass playerClass) {
 
         PlayerUpgrades playerUpgrades = this.data.playerUpgrades.get(uuid);
