@@ -67,7 +67,7 @@ public class ClassCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -75,14 +75,14 @@ public class ClassCommand {
 
         Team team = teamManager.getTeam(player.getUUID());
         if (team == null) {
-            player.sendSystemMessage(Component.literal("You are not in a team!")
+            player.sendSystemMessage(Component.translatable("message.not_in_team")
                     .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (team.hasClass(player.getUUID())) {
-            player.sendSystemMessage(Component.literal("You already have a class and cannot switch!")
+            player.sendSystemMessage(Component.translatable("message.command.class.already")
                     .withStyle(ChatFormatting.RED)
             );
             return;
@@ -91,15 +91,14 @@ public class ClassCommand {
         String className = playerClass.name().toLowerCase();
         List<String> validClasses = Arrays.asList("healer", "tank", "miner", "archer", "builder");
         if (!validClasses.contains(className)) {
-            player.sendSystemMessage(Component.literal(
-                    "Invalid class! Valid classes: healer, tank, miner, archer, builder"
-                    ).withStyle(ChatFormatting.RED)
+            player.sendSystemMessage(Component.translatable("message.command.class.invalid")
+                    .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (!team.assignClass(className, player.getUUID())) {
-            player.sendSystemMessage(Component.literal("This class is already taken in your team!")
+            player.sendSystemMessage(Component.translatable("message.command.class.is_taken")
                     .withStyle(ChatFormatting.RED)
             );
             return;
@@ -107,7 +106,7 @@ public class ClassCommand {
 
         teamManager.setPlayerClass(player, playerClass);
 
-        player.sendSystemMessage(Component.literal("You are now a " + className + "!")
+        player.sendSystemMessage(Component.translatable("message.command.class.your_class", className)
                 .withStyle(ChatFormatting.GREEN)
         );
     }

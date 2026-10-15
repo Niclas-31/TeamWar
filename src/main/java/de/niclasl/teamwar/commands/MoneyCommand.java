@@ -77,7 +77,7 @@ public class MoneyCommand {
             sender = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -85,7 +85,7 @@ public class MoneyCommand {
 
         if (sender == target) {
             sender.sendSystemMessage(
-                    Component.literal("You cannot give money to yourself!")
+                    Component.translatable("message.command.money.give.cannot_give_yourself")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -101,7 +101,7 @@ public class MoneyCommand {
 
             if (money.getTeamMoney(senderTeam) < amount) {
                 sender.sendSystemMessage(
-                        Component.literal("Not enough money in your team!")
+                        Component.translatable("message.command.money.give.not_enough.team_money")
                                 .withStyle(ChatFormatting.RED)
                 );
                 return;
@@ -113,7 +113,7 @@ public class MoneyCommand {
 
             if (money.getPlayerMoney(sender.getUUID()) < amount) {
                 sender.sendSystemMessage(
-                        Component.literal("You don't have enough money!")
+                        Component.translatable("message.command.money.give.not_enough.player_money")
                                 .withStyle(ChatFormatting.RED)
                 );
                 return;
@@ -130,16 +130,13 @@ public class MoneyCommand {
 
         String formatted = format(amount);
 
-        sender.sendSystemMessage(
-                Component.literal(
-                        "Gave " + formatted + "$ to " + target.getGameProfile().name()
+        sender.sendSystemMessage(Component.translatable("message.command.money.give.sender",
+                        formatted, target.getGameProfile().name()
                 ).withStyle(ChatFormatting.GREEN)
         );
 
-        target.sendSystemMessage(
-                Component.literal(
-                        "You received " + formatted + "$ from "
-                                + sender.getGameProfile().name()
+        target.sendSystemMessage(Component.translatable("message.command.money.give.target",
+                        formatted, sender.getGameProfile().name()
                 ).withStyle(ChatFormatting.GREEN)
         );
     }
@@ -151,7 +148,7 @@ public class MoneyCommand {
             sender = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -170,17 +167,13 @@ public class MoneyCommand {
 
         String formatted = format(amount);
 
-        sender.sendSystemMessage(
-                Component.literal(
-                        "Removed " + formatted + "$ from "
-                                + target.getGameProfile().name()
+        sender.sendSystemMessage(Component.translatable("message.command.money.take.sender",
+                        formatted, target.getGameProfile().name()
                 ).withStyle(ChatFormatting.GREEN)
         );
 
-        target.sendSystemMessage(
-                Component.literal(
-                        formatted + "$ were removed by "
-                                + sender.getGameProfile().name()
+        target.sendSystemMessage(Component.translatable("message.command.money.take.target",
+                        formatted, sender.getGameProfile().name()
                 ).withStyle(ChatFormatting.RED)
         );
     }
@@ -192,7 +185,7 @@ public class MoneyCommand {
             sender = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -207,40 +200,26 @@ public class MoneyCommand {
 
             money.setTeamMoney(targetTeam, amount);
 
-            sender.sendSystemMessage(
-                    Component.literal(
-                            "Set " + target.getGameProfile().name()
-                                    + "'s team money to " + format(amount) + "$"
+            sender.sendSystemMessage(Component.translatable("message.command.money.set.sender.team",
+                            target.getGameProfile().name(), format(amount)
                     ).withStyle(ChatFormatting.GREEN)
             );
 
-            target.sendSystemMessage(
-                    Component.literal(
-                            "Your team's balance was set to "
-                                    + format(amount)
-                                    + "$ by "
-                                    + sender.getGameProfile().name()
+            target.sendSystemMessage(Component.translatable("message.command.money.set.target.team",
+                            format(amount), sender.getGameProfile().name()
                     ).withStyle(ChatFormatting.GREEN)
             );
-
         } else {
-
             money.setPlayerMoney(target.getUUID(), amount);
 
-            sender.sendSystemMessage(
-                    Component.literal(
-                            "Set " + target.getGameProfile().name()
-                                    + "'s money to " + format(amount) + "$"
-                    ).withStyle(ChatFormatting.GREEN)
+            sender.sendSystemMessage(Component.translatable("message.command.money.set.sender",
+                            target.getGameProfile().name(), format(amount))
+                    .withStyle(ChatFormatting.GREEN)
             );
 
-            target.sendSystemMessage(
-                    Component.literal(
-                            "Your balance was set to "
-                                    + format(amount)
-                                    + "$ by "
-                                    + sender.getGameProfile().name()
-                    ).withStyle(ChatFormatting.GREEN)
+            target.sendSystemMessage(Component.translatable("message.command.money.set.target",
+                            format(amount), sender.getGameProfile().name())
+                    .withStyle(ChatFormatting.GREEN)
             );
         }
     }

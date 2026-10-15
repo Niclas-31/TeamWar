@@ -46,7 +46,7 @@ public class HealCommand {
             commandPlayer = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -54,7 +54,7 @@ public class HealCommand {
 
         Team team = teamManager.getTeam(commandPlayer.getUUID());
         if (team == null) {
-            commandPlayer.sendSystemMessage(Component.literal("You are not in a team!")
+            commandPlayer.sendSystemMessage(Component.translatable("message.not_in_team")
                     .withStyle(ChatFormatting.RED)
             );
             return;
@@ -62,7 +62,7 @@ public class HealCommand {
 
         String playerClass = team.getPlayerClass(commandPlayer.getUUID());
         if (!"healer".toUpperCase(Locale.ROOT).equalsIgnoreCase(playerClass)) {
-            commandPlayer.sendSystemMessage(Component.literal("Only healers can use this command!")
+            commandPlayer.sendSystemMessage(Component.translatable("message.command.heal.only_healers")
                     .withStyle(ChatFormatting.RED)
             );
             return;
@@ -81,15 +81,13 @@ public class HealCommand {
                 float newHealth = (float) Math.min(player.getHealth() + healAmount,
                         Objects.requireNonNull(player.getAttribute(Attributes.MAX_HEALTH)).getValue());
                 player.setHealth(newHealth);
-                player.sendSystemMessage(Component.literal(
-                        "You have been healed by your healer for " + healAmount + " HP!")
+                player.sendSystemMessage(Component.translatable("message.command.heal.healed_by_healer", healAmount)
                         .withStyle(ChatFormatting.GREEN)
                 );
             }
         }
 
-        commandPlayer.sendSystemMessage(Component.literal(
-                "You healed your team for " + healAmount + " HP each!")
+        commandPlayer.sendSystemMessage(Component.translatable("message.command.heal.you_healed_your_team", healAmount)
                 .withStyle(ChatFormatting.GREEN)
         );
     }
