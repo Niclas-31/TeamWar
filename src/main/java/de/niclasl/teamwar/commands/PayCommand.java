@@ -50,7 +50,7 @@ public class PayCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -58,7 +58,7 @@ public class PayCommand {
 
         if (player.equals(target)) {
             player.sendSystemMessage(
-                    Component.literal("You cannot pay yourself!")
+                    Component.translatable("message.command.pay.cannot_pay_yourself")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -72,19 +72,16 @@ public class PayCommand {
 
         if (playerTeam == null) {
             player.sendSystemMessage(
-                    Component.literal("You are not in a team!")
+                    Component.translatable("message.not_in_team")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (targetTeam == null) {
-            player.sendSystemMessage(
-                    Component.literal(
-                            target.getGameProfile().name()
-                                    + " is not in a team!"
-                    ).withStyle(ChatFormatting.RED)
-            );
+            player.sendSystemMessage(Component.translatable(
+                    "message.command.pay.target.not_in_team", target.getGameProfile().name()
+            ).withStyle(ChatFormatting.RED));
             return;
         }
 
@@ -92,7 +89,7 @@ public class PayCommand {
 
         if (moneyManager.getTeamMoney(playerTeam) < payment) {
             player.sendSystemMessage(
-                    Component.literal("Not enough money in your team!")
+                    Component.translatable("message.command.pay.not_enough_money")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -104,22 +101,17 @@ public class PayCommand {
         String formattedAmount = MoneyManager.formatMoney(payment);
 
         player.sendSystemMessage(
-                Component.literal(
-                        "Paid " + formattedAmount
-                                + "$ from your team to "
-                                + target.getGameProfile().name()
-                                + "'s team!"
+                Component.translatable(
+                        "message.command.pay.sender.paid",
+                        formattedAmount, target.getGameProfile().name()
                 ).withStyle(ChatFormatting.GREEN)
         );
 
         target.sendSystemMessage(
-                Component.literal(
-                        "Received " + formattedAmount
-                                + "$ for your team from "
-                                + player.getGameProfile().name()
-                                + "'s team!"
+                Component.translatable(
+                        "message.command.pay.target.received",
+                        formattedAmount, player.getGameProfile().name()
                 ).withStyle(ChatFormatting.GREEN)
         );
-
     }
 }

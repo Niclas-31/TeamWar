@@ -39,13 +39,13 @@ public class PlayerStatsCommand {
             commandPlayer = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
-        commandPlayer.sendSystemMessage(Component.literal("=== Player Stats ===")
+        commandPlayer.sendSystemMessage(Component.translatable("message.command.player_stats")
                 .withStyle(ChatFormatting.GOLD));
 
         for (ServerPlayer player : commandPlayer.level().getServer().getPlayerList().getPlayers()) {
