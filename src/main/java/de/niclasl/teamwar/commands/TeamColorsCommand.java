@@ -90,7 +90,7 @@ public class TeamColorsCommand {
 
     private static void showPage(ServerPlayer player, int page) {
         if (page < 1 || page > 3) {
-            player.sendSystemMessage(Component.literal("Please enter a valid page (1-3).")
+            player.sendSystemMessage(Component.translatable("message.command.team_colors.invalid_page")
                     .withStyle(ChatFormatting.RED));
 
             return;
@@ -104,7 +104,8 @@ public class TeamColorsCommand {
 
         int endIndex = Math.min(startIndex + PAGE_SIZES[page - 1], COLORS.length);
 
-        player.sendSystemMessage(Component.literal("Team Colors - Page " + page + "/3")
+        player.sendSystemMessage(Component.translatable(
+                "message.command.team_colors.page_from_page", page)
                 .withStyle(ChatFormatting.BOLD));
 
         for (int i = startIndex; i < endIndex; i++) {
@@ -120,12 +121,13 @@ public class TeamColorsCommand {
 
         if (page > 1) {
 
-            Component previous = Component.literal("[Previous Page] ").withStyle(style ->
-                    style.withColor(ChatFormatting.GOLD)
-                            .withClickEvent(new ClickEvent.RunCommand(
+            Component previous = Component.translatable("message.command.team_colors.previous_page")
+                    .withStyle(style ->
+                            style
+                                    .withColor(ChatFormatting.GOLD)
+                                    .withClickEvent(new ClickEvent.RunCommand(
                                             "/team-colors " + (page - 1)
-                                    )
-                            )
+                                    ))
             );
 
             navigation = navigation.copy().append(previous);
@@ -133,15 +135,13 @@ public class TeamColorsCommand {
 
         if (page < 3) {
 
-            Component next = Component.literal(
-                    "[Next Page]"
-            ).withStyle(style ->
-                    style
-                            .withColor(ChatFormatting.GOLD)
-                            .withClickEvent(new ClickEvent.RunCommand(
+            Component next = Component.translatable("message.command.team_colors.next_page")
+                    .withStyle(style ->
+                            style
+                                    .withColor(ChatFormatting.GOLD)
+                                    .withClickEvent(new ClickEvent.RunCommand(
                                             "/team-colors " + (page + 1)
-                                    )
-                            )
+                                    ))
             );
 
             navigation = navigation.copy().append(next);

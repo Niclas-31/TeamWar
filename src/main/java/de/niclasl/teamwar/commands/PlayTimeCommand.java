@@ -30,9 +30,8 @@ public class PlayTimeCommand {
                             long seconds = playerManager.getDailyPlayTime(player.getUUID());
 
                             player.sendSystemMessage(
-                                    Component.literal(
-                                            "Your playing time today: "
-                                                    + formatTime(seconds))
+                                    Component.translatable("message.command.playtime.your_playtime",
+                                            formatTime(seconds))
                             );
                             return 1;
                         })
@@ -46,7 +45,8 @@ public class PlayTimeCommand {
                                     for (ServerPlayer player : players) {
 
                                         if (player == null) {
-                                            sender.sendSystemMessage(Component.literal("Player not found!")
+                                            sender.sendSystemMessage(
+                                                    Component.translatable("message.command.playtime.player_not_found")
                                                     .withStyle(ChatFormatting.RED)
                                             );
                                             return 0;
@@ -56,14 +56,10 @@ public class PlayTimeCommand {
 
                                         long seconds = playerManager.getDailyPlayTime(player.getUUID());
 
-                                        sender.sendSystemMessage(
-                                                Component.literal(
-                                                        player.getName().getString()
-                                                                + " today's game time: "
-                                                                + formatTime(
-                                                                seconds
-                                                        )
-                                                )
+                                        sender.sendSystemMessage(Component.translatable(
+                                                "message.command.playtime.other_playtime",
+                                                player.getName().getString(),
+                                                formatTime(seconds))
                                         );
                                     }
 
