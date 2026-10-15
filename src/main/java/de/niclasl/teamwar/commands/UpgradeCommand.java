@@ -38,7 +38,7 @@ public class UpgradeCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -50,7 +50,7 @@ public class UpgradeCommand {
 
         if (playerClass == null) {
             player.sendSystemMessage(
-                    Component.literal("You don't have a class!")
+                    Component.translatable("message.upgrade.no_class")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -70,7 +70,7 @@ public class UpgradeCommand {
                                         playerUpgrades,
                                         classManager
                                 ),
-                        Component.literal("Upgrades")
+                        Component.translatable("gui.teamwar.upgrades")
                 )
         );
     }

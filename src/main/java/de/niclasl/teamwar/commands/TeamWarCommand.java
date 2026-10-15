@@ -210,19 +210,22 @@ public class TeamWarCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (teamManager.exists(teamName)) {
-            player.sendSystemMessage(Component.literal("§cTeam already exists").withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.translatable("message.command.teamwar.team_exist")
+                    .withStyle(ChatFormatting.RED));
             return;
         }
 
         teamManager.createTeam(teamName);
-        player.sendSystemMessage(Component.literal("Team created: " + teamName).withStyle(ChatFormatting.GREEN));
+        player.sendSystemMessage(Component.translatable(
+                "message.command.teamwar.team_created", teamName)
+                .withStyle(ChatFormatting.GREEN));
     }
 
     private static void delete(CommandSourceStack source, String teamName) {
@@ -234,21 +237,24 @@ public class TeamWarCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (!teamManager.exists(teamName)) {
-            player.sendSystemMessage(Component.literal("Team doesn't exist!").withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.translatable("message.command.teamwar.team_doesnt_exist")
+                    .withStyle(ChatFormatting.RED));
             return;
         }
 
         teamManager.deleteTeam(teamName);
         bedManager.removeBed(teamName);
         bedManager.removeRespawnForTeam(teamName);
-        player.sendSystemMessage(Component.literal("Team deleted: " + teamName).withStyle(ChatFormatting.GREEN));
+        player.sendSystemMessage(Component.translatable(
+                "message.command.teamwar.team_deleted", teamName)
+                .withStyle(ChatFormatting.GREEN));
     }
 
     private static void setSpawn(CommandSourceStack source, String teamName, ServerLevel level) {
@@ -259,14 +265,15 @@ public class TeamWarCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (!teamManager.exists(teamName)) {
-            player.sendSystemMessage(Component.literal("Team doesn't exist!").withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.translatable("message.command.teamwar.team_doesnt_exist")
+                    .withStyle(ChatFormatting.RED));
             return;
         }
 
@@ -283,7 +290,9 @@ public class TeamWarCommand {
         Team team = teamManager.getTeamByName(teamName);
         if (team != null) team.setSpawn(loc);
         teamManager.setTeamSpawn(teamName, loc);
-        player.sendSystemMessage(Component.literal("Spawn set for team " + teamName).withStyle(ChatFormatting.GREEN));
+        player.sendSystemMessage(Component.translatable(
+                "message.command.teamwar.team_spawn_set", teamName)
+                .withStyle(ChatFormatting.GREEN));
     }
 
     private static void setBed(CommandSourceStack source, String teamName, ServerLevel level) {
@@ -295,14 +304,15 @@ public class TeamWarCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (!teamManager.exists(teamName)) {
-            player.sendSystemMessage(Component.literal("Team doesn't exist!").withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.translatable("message.command.teamwar.team_doesnt_exist")
+                    .withStyle(ChatFormatting.RED));
             return;
         }
 
@@ -314,10 +324,9 @@ public class TeamWarCommand {
 
         bedManager.setBedForTeam(teamName, level, base, head, player.getYHeadRot());
 
-        player.sendSystemMessage(Component.literal("Bed set for team " + teamName +
-                " at X:" + base.getX() +
-                " Y:" + base.getY() +
-                " Z:" + base.getZ())
+        player.sendSystemMessage(Component.translatable(
+                "message.command.teamwar.team_bed_set",
+                        teamName, base.getX(), base.getY(), base.getZ())
                 .withStyle(ChatFormatting.GREEN)
         );
     }
@@ -330,7 +339,7 @@ public class TeamWarCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -338,36 +347,29 @@ public class TeamWarCommand {
 
         Team team = teamManager.getTeam(player.getUUID());
         if (team == null) {
-            player.sendSystemMessage(Component.literal("You're not on any team!")
+            player.sendSystemMessage(Component.translatable("message.not_in_team")
                     .withStyle(ChatFormatting.RED));
             return;
         }
 
         if (isPos1) {
             teamManager.setPos1(team, pos);
-            player.sendSystemMessage(Component.literal(
-                    "Base point 1 set at: X=" + pos.getX() +
-                    " Y=" + pos.getY() +
-                    " Z=" + pos.getZ())
-                    .withStyle(ChatFormatting.GREEN)
-            );
+            player.sendSystemMessage(Component.translatable(
+                    "message.command.teamwar.pos1", pos.getX(), pos.getY(), pos.getZ()
+            ).withStyle(ChatFormatting.GREEN));
         } else {
             teamManager.setPos2(team, pos);
-            player.sendSystemMessage(Component.literal(
-                    "Base point 2 set at: X=" + pos.getX() +
-                    " Y=" + pos.getY() +
-                    " Z=" + pos.getZ())
-                    .withStyle(ChatFormatting.GREEN)
-            );
+            player.sendSystemMessage(Component.translatable(
+                    "message.command.teamwar.pos2", pos.getX(), pos.getY(), pos.getZ()
+            ).withStyle(ChatFormatting.GREEN));
         }
 
         if (team.getPos1() != null && team.getPos2() != null) {
-            player.sendSystemMessage(Component.literal("Team base has been set from: " +
-                    team.getPos1().getX() + " " + team.getPos1().getY() + " " + team.getPos1().getY() +
-                    " to: " +
-                    team.getPos2().getX() + " " + team.getPos2().getY() + " " + team.getPos2().getY())
-                    .withStyle(ChatFormatting.YELLOW)
-            );
+          player.sendSystemMessage(Component.translatable(
+                  "message.command.teamwar.pos",
+                  team.getPos1().getX(), team.getPos1().getY(), team.getPos1().getZ(),
+                  team.getPos2().getX(), team.getPos2().getY(), team.getPos2().getZ()
+          ).withStyle(ChatFormatting.YELLOW));
         }
     }
 
@@ -379,14 +381,14 @@ public class TeamWarCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         lobbyManager.setLobbySpawn(level, pos, player.getYHeadRot(), player.getXRot());
-        player.sendSystemMessage(Component.literal("Lobby spawn set!")
+        player.sendSystemMessage(Component.translatable("message.command.teamwar.lobby_set")
                 .withStyle(ChatFormatting.GREEN)
         );
     }
@@ -400,14 +402,14 @@ public class TeamWarCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (lobbyManager.getLobbySpawn() == null) {
-            player.sendSystemMessage(Component.literal("Lobby spawn is not set yet!")
+            player.sendSystemMessage(Component.translatable("message.command.teamwar.lobby_not_set")
                     .withStyle(ChatFormatting.RED)
             );
             return;
@@ -415,7 +417,7 @@ public class TeamWarCommand {
 
 
         gameManager.setGameState(GameState.LOBBY);
-        player.sendSystemMessage(Component.literal("All players have been teleported to the lobby!")
+        player.sendSystemMessage(Component.translatable("message.command.teamwar.lobby.all_players")
                 .withStyle(ChatFormatting.GREEN)
         );
         lobbyManager.addPlayerToLobby(player);
@@ -432,28 +434,28 @@ public class TeamWarCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (lobbyManager.isInLobby(player)) {
-            player.sendSystemMessage(Component.literal(
-                    "§eYou are in the game and cannot use this command!"
+            player.sendSystemMessage(Component.translatable(
+                    "message.command.teamwar.in_the_game"
             ).withStyle(ChatFormatting.RED));
             return;
         }
 
         if (player.level().getServer().getPlayerList().isOp(player.nameAndId())) {
-            player.sendSystemMessage(Component.literal("Admins cannot join a team!")
+            player.sendSystemMessage(Component.translatable("message.command.teamwar.admin_cannot_join")
                     .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (!teamManager.exists(teamName)) {
-            player.sendSystemMessage(Component.literal("Team doesn't exist!")
+            player.sendSystemMessage(Component.translatable("message.command.teamwar.team_doesnt_exist")
                     .withStyle(ChatFormatting.RED)
             );
             return;
@@ -461,15 +463,16 @@ public class TeamWarCommand {
 
         int maxPlayers = 5;
         if (teamManager.getTeamPlayers(teamName).size() >= maxPlayers) {
-            player.sendSystemMessage(Component.literal(
-                    "This team is full! Max " + maxPlayers + " players allowed.")
+            player.sendSystemMessage(Component.translatable(
+                    "message.command.teamwar.team_full", maxPlayers)
                     .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         teamManager.addPlayerToTeam(player.getUUID(), teamName);
-        player.sendSystemMessage(Component.literal("You joined team: " + teamName)
+        player.sendSystemMessage(Component.translatable(
+                "message.command.teamwar.team_joined", teamName)
                 .withStyle(ChatFormatting.GREEN)
         );
     }
@@ -483,22 +486,22 @@ public class TeamWarCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (lobbyManager.isInLobby(player)) {
-            player.sendSystemMessage(Component.literal(
-                    "§eYou are in the game and cannot use this command!"
+            player.sendSystemMessage(Component.translatable(
+                    "message.command.teamwar.in_the_game"
                     ).withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (!teamManager.isInTeam(player.getUUID())) {
-            player.sendSystemMessage(Component.literal("You are not in any team!")
+            player.sendSystemMessage(Component.translatable("message.not_in_team")
                     .withStyle(ChatFormatting.RED)
             );
             return;
@@ -509,7 +512,7 @@ public class TeamWarCommand {
             teamManager.removePlayerFromTeam(player.getUUID());
         }
 
-        player.sendSystemMessage(Component.literal("You left your team")
+        player.sendSystemMessage(Component.translatable("message.command.teamwar.team_leaved")
                 .withStyle(ChatFormatting.GREEN)
         );
     }
@@ -537,14 +540,14 @@ public class TeamWarCommand {
             commandPlayer = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (GameManager.getGameState() == GameState.RUNNING) {
-            commandPlayer.sendSystemMessage(Component.literal("The game is already running!")
+            commandPlayer.sendSystemMessage(Component.translatable("message.command.teamwar.already_running")
                     .withStyle(ChatFormatting.RED)
             );
             return;
@@ -592,11 +595,11 @@ public class TeamWarCommand {
                 }
             }
             lobbyManager.removePlayerFromLobby(player);
-            player.sendSystemMessage(Component.literal("You have been teleported to your team spawn.")
+            player.sendSystemMessage(Component.translatable("message.command.teamwar.teleport")
                     .withStyle(ChatFormatting.GREEN));
         }
 
-        commandPlayer.sendSystemMessage(Component.literal("The game has started!")
+        commandPlayer.sendSystemMessage(Component.translatable("message.command.teamwar.game_started")
                 .withStyle(ChatFormatting.GREEN)
         );
 
@@ -618,7 +621,7 @@ public class TeamWarCommand {
             commandPlayer = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
@@ -626,20 +629,20 @@ public class TeamWarCommand {
 
         if (GameManager.getGameState() == GameState.LOBBY
                 || GameManager.getGameState() == GameState.ENDED) {
-            commandPlayer.sendSystemMessage(Component.literal("The game is already stopped!")
+            commandPlayer.sendSystemMessage(Component.translatable("message.command.teamwar.already_stopped")
                     .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
         if (lobbyManager.getLobbySpawn() == null) {
-            commandPlayer.sendSystemMessage(Component.literal("Lobby spawn is not set!")
+            commandPlayer.sendSystemMessage(Component.translatable("message.command.teamwar.lobby_not_set")
                     .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
-        commandPlayer.sendSystemMessage(Component.literal("Stopping the game...")
+        commandPlayer.sendSystemMessage(Component.translatable("message.command.teamwar.stopping_game")
                 .withStyle(ChatFormatting.RED)
         );
 
@@ -659,7 +662,7 @@ public class TeamWarCommand {
         borderManager.stopGameBorder();
 
         commandPlayer.level().getServer().getPlayerList().broadcastSystemMessage(
-                Component.literal("The game has been stopped!")
+                Component.translatable("message.command.teamwar.game_stopped")
                         .withStyle(ChatFormatting.RED), false
         );
     }
@@ -672,16 +675,16 @@ public class TeamWarCommand {
             player = source.getPlayerOrException();
         } catch (CommandSyntaxException e) {
             source.sendFailure(
-                    Component.literal("Only players can use this command!")
+                    Component.translatable("message.command.only_players")
                             .withStyle(ChatFormatting.RED)
             );
             return;
         }
 
-        player.sendSystemMessage(Component.literal("Teams: " +
+        player.sendSystemMessage(Component.translatable("message.command.teamwar.teams",
                 String.join(", ", teamManager.getTeams().keySet()))
                 .withStyle(ChatFormatting.GREEN));
-        player.sendSystemMessage(Component.literal("Team Spawns: " +
+        player.sendSystemMessage(Component.translatable("message.command.teamwar.team_spawns",
                 String.join(", ", teamManager.getTeamSpawns().keySet()))
                 .withStyle(ChatFormatting.GREEN));
     }
