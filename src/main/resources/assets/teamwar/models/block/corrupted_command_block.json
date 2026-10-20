@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_command_block",
+  "textures": {
+    "back": "teamwar:block/corrupted_command_block_back",
+    "front": "teamwar:block/corrupted_command_block_front",
+    "side": "teamwar:block/corrupted_command_block_side"
+  }
+}

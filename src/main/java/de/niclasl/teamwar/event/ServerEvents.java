@@ -40,9 +40,9 @@ public class ServerEvents {
             return;
         }
 
-        ServerLevel level = player.level();
+        MinecraftServer server = player.level().getServer();
 
-        ScheduledEventsSavedData events = ScheduledEventsSavedData.get(level.getServer().overworld());
+        ScheduledEventsSavedData events = server.getDataStorage().computeIfAbsent(ScheduledEventsSavedData.TYPE);
 
         PacketDistributor.sendToPlayer(
                 player,

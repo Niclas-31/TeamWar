@@ -1,6 +1,7 @@
 package de.niclasl.teamwar.api.events;
 
 import de.niclasl.teamwar.api.calendar.CalendarEventStatus;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 
 import java.time.Instant;
@@ -9,27 +10,23 @@ import java.util.UUID;
 public abstract class Event {
 
     private final UUID id;
-    protected final ServerLevel level;
+    protected final MinecraftServer server;
 
     protected Event(UUID id, ServerLevel level) {
         this.id = id;
-        this.level = level;
+        this.server = level.getServer();
     }
 
     public UUID getId() {
         return id;
     }
 
-    public ServerLevel getLevel() {
-        return level;
-    }
-
     protected ScheduledEventsSavedData getSavedData() {
-        return ScheduledEventsSavedData.get(this.level.getServer().overworld());
+        return server.getDataStorage().computeIfAbsent(ScheduledEventsSavedData.TYPE);
     }
 
     protected PlannedEventEntry getData() {
-        ScheduledEventsSavedData savedData = ScheduledEventsSavedData.get(level.getServer().overworld());
+        ScheduledEventsSavedData savedData = getSavedData();
 
         return savedData.getEvent(id);
     }

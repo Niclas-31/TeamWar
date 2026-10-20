@@ -9,7 +9,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 
@@ -37,7 +37,7 @@ public record CreateEventPayload(
 
   public static void handle(CreateEventPayload msg, IPayloadContext ctx) {
     ctx.enqueueWork(() -> {
-      if (!(ctx.player() instanceof ServerPlayer player)) {
+      if (!(ctx.player().level() instanceof ServerLevel level)) {
         return;
       }
 
@@ -45,7 +45,7 @@ public record CreateEventPayload(
         return;
       }
 
-      ScheduledEventsSavedData savedData = ScheduledEventsSavedData.get(player.level().getServer().overworld());
+      ScheduledEventsSavedData savedData = level.getServer().getDataStorage().computeIfAbsent(ScheduledEventsSavedData.TYPE);
 
       UUID eventId = UUID.randomUUID();
 

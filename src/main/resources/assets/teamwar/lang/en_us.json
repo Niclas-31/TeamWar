@@ -3,6 +3,10 @@
 
   "key.temawar.calendar": "Open Calendar",
 
+  "item.teamwar.corrupted_pickaxe": "Corrupted Pickaxe",
+
+  "block.teamwar.corrupted_command_block": "Corrupted Command Block",
+
   "gui.teamwar.calendar": "Calendar",
   "gui.teamwar.calendar.month.1": "January",
   "gui.teamwar.calendar.month.2": "February",

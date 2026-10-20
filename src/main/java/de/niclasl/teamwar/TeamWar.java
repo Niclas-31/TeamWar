@@ -15,6 +15,8 @@ import de.niclasl.teamwar.player.PlayerManager;
 import de.niclasl.teamwar.pvp.PvPManager;
 import de.niclasl.teamwar.registries.blocks.ModBlocks;
 import de.niclasl.teamwar.registries.items.ModItems;
+import de.niclasl.teamwar.repair.WorldBalanceSavedData;
+import de.niclasl.teamwar.repair.WorldBalanceState;
 import de.niclasl.teamwar.scoreboard.TeamWarScoreboard;
 import de.niclasl.teamwar.strength.StrengthManager;
 import de.niclasl.teamwar.team.TeamManager;
@@ -22,6 +24,7 @@ import de.niclasl.teamwar.worldgen.biome_source.ModBiomeSource;
 import de.niclasl.teamwar.worldgen.density.IslandDensityFunction;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -29,6 +32,12 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.UUID;
 
 @Mod(TeamWar.MOD_ID)
 public class TeamWar {
@@ -47,6 +56,8 @@ public class TeamWar {
     private static StrengthManager strengthManager;
     private static TeamWarScoreboard scoreboard;
     private static MoneyManager moneyManager;
+
+    private static final String REPAIR_FILE = "overworld_repair.dat";
 
     public TeamWar(IEventBus modEventBus) {
         modEventBus.addListener(ModNetwork::register);
@@ -79,7 +90,7 @@ public class TeamWar {
     }
 
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
+    public void onServerStarting(ServerStartingEvent event) throws IOException {
         MinecraftServer server = event.getServer();
 
         teamManager = new TeamManager(server);
@@ -93,6 +104,76 @@ public class TeamWar {
         strengthManager = new StrengthManager(server);
         scoreboard = new TeamWarScoreboard(server);
         moneyManager = new MoneyManager(server);
+
+        WorldBalanceSavedData balance = server.getDataStorage().computeIfAbsent(WorldBalanceSavedData.TYPE);
+
+        if (balance.getState() == WorldBalanceState.INCOMPATIBLE) {
+            server.halt(false);
+            return;
+        }
+
+        Path overworldPath = server.getWorldPath(LevelResource.ROOT);
+
+        UUID currentIdentity = getOrCreateWorldIdentity(overworldPath);
+
+        if (isOverworldRegenerated(server, currentIdentity)) {
+            WorldBalanceSavedData data = server.getDataStorage().computeIfAbsent(WorldBalanceSavedData.TYPE);
+            data.setState(WorldBalanceState.BALANCED);
+            data.setDirty();
+        }
+    }
+
+    private static boolean isOverworldRegenerated(MinecraftServer server, UUID currentIdentity) throws IOException {
+
+        Path repairFile = server.getServerDirectory()
+                .resolve("config")
+                .resolve(MOD_ID)
+                .resolve(REPAIR_FILE);
+
+        if (!Files.exists(repairFile)) {
+            return false;
+        }
+
+        String previousValue = Files.readString(repairFile).trim();
+
+        UUID previousIdentity;
+
+        try {
+            previousIdentity = UUID.fromString(previousValue);
+        } catch (IllegalArgumentException exception) {
+            throw new IOException(
+                    "Ungültige gespeicherte Oberwelt-ID.",
+                    exception
+            );
+        }
+
+        if (previousIdentity.equals(currentIdentity)) {
+            return false;
+        }
+
+        Files.delete(repairFile);
+        return true;
+    }
+
+    private static UUID getOrCreateWorldIdentity(Path overworldPath)
+            throws IOException {
+
+        Path identityPath = overworldPath.resolve("world_identity.dat");
+
+        if (Files.exists(identityPath)) {
+            String value = Files.readString(identityPath).trim();
+            return UUID.fromString(value);
+        }
+
+        UUID newIdentity = UUID.randomUUID();
+
+        Files.writeString(
+                identityPath,
+                newIdentity.toString(),
+                StandardOpenOption.CREATE_NEW
+        );
+
+        return newIdentity;
     }
 
     public static TeamManager getTeamManager() {

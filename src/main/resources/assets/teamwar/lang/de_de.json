@@ -3,6 +3,10 @@
 
   "key.temawar.calendar": "Kalender öffnen",
 
+  "item.teamwar.corrupted_pickaxe": "Verderbte Spitzhacke",
+
+  "block.teamwar.corrupted_command_block": "Beschädigter Befehlsblock",
+
   "gui.teamwar.calendar": "Kalender",
   "gui.teamwar.calendar.month.1": "Januar",
   "gui.teamwar.calendar.month.2": "Februar",
