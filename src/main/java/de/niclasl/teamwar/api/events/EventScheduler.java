@@ -43,7 +43,7 @@ public class EventScheduler {
   private static void tick(MinecraftServer server) {
     long now = System.currentTimeMillis();
 
-    var savedData = ScheduledEventsSavedData.get(server);
+    var savedData = server.getDataStorage().computeIfAbsent(ScheduledEventsSavedData.TYPE);
 
     if (!ACTIVE_EVENTS.isEmpty()) {
       var iterator = ACTIVE_EVENTS.entrySet().iterator();
@@ -96,7 +96,7 @@ public class EventScheduler {
   }
 
   private static void restoreRunningEvents(MinecraftServer server) {
-    var savedData = ScheduledEventsSavedData.get(server);
+    var savedData = server.getDataStorage().computeIfAbsent(ScheduledEventsSavedData.TYPE);
     long now = System.currentTimeMillis();
 
     for (PlannedEventEntry entry : savedData.getEvents()) {
