@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import de.niclasl.teamwar.TeamWar;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
@@ -28,10 +27,6 @@ public class MoneySavedData extends SavedData {
             new SavedDataType<>(
                     Identifier.fromNamespaceAndPath(TeamWar.MOD_ID, "money"),
                     MoneySavedData::new, CODEC);
-
-    public static MoneySavedData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(TYPE);
-    }
 
     public void read(CompoundTag tag) {
         CompoundTag teams = tag.getCompoundOrEmpty("teamBalances");

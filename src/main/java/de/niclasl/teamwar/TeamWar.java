@@ -13,16 +13,20 @@ import de.niclasl.teamwar.menu.ModMenuTypes;
 import de.niclasl.teamwar.network.ModNetwork;
 import de.niclasl.teamwar.player.PlayerManager;
 import de.niclasl.teamwar.pvp.PvPManager;
+import de.niclasl.teamwar.registries.blocks.ModBlocks;
+import de.niclasl.teamwar.registries.items.ModItems;
 import de.niclasl.teamwar.scoreboard.TeamWarScoreboard;
 import de.niclasl.teamwar.strength.StrengthManager;
 import de.niclasl.teamwar.team.TeamManager;
 import de.niclasl.teamwar.worldgen.biome_source.ModBiomeSource;
 import de.niclasl.teamwar.worldgen.density.IslandDensityFunction;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
@@ -50,14 +54,28 @@ public class TeamWar {
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.addListener(EventScheduler::onServerTick);
 
-        IslandDensityFunction.REGISTER.register(modEventBus);
         IslandDensityFunction.init();
-        ModBiomeSource.REGISTER.register(modEventBus);
+        IslandDensityFunction.REGISTER.register(modEventBus);
         ModBiomeSource.init();
+        ModBiomeSource.REGISTER.register(modEventBus);
+
+        ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
 
         Events.register();
 
         ModMenuTypes.register(modEventBus);
+
+        modEventBus.addListener(this::addCreative);
+    }
+
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(ModItems.CORRUPTED_PICKAXE);
+        }
+        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+            event.accept(ModBlocks.CORRUPTED_COMMAND_BLOCK);
+        }
     }
 
     @SubscribeEvent

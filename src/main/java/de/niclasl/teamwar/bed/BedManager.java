@@ -32,7 +32,7 @@ public class BedManager {
     public BedManager(MinecraftServer server) {
         this.server = server;
         this.teamManager = TeamWar.getTeamManager();
-        this.data = BedSavedData.get(server.overworld());
+        this.data = server.getDataStorage().computeIfAbsent(BedSavedData.TYPE);
     }
 
     public void setBedForTeam(

@@ -9,14 +9,17 @@ import de.niclasl.teamwar.game.GameManager;
 import de.niclasl.teamwar.game.GameSavedData;
 import de.niclasl.teamwar.game.GameState;
 import de.niclasl.teamwar.lobby.LobbyManager;
+import de.niclasl.teamwar.lobby.LobbySavedData;
 import de.niclasl.teamwar.network.SyncCalendarPayload;
 import de.niclasl.teamwar.player.PlayerManager;
 import de.niclasl.teamwar.player.PlayerSavedData;
+import de.niclasl.teamwar.repair.WorldBalanceSavedData;
 import de.niclasl.teamwar.scoreboard.TeamWarScoreboard;
 import de.niclasl.teamwar.team.TeamManager;
 import de.niclasl.teamwar.team.TeamSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
@@ -92,56 +95,72 @@ public class ServerEvents {
     public static void onWorldTick(LevelTickEvent.Post event) {
         if (!(event.getLevel() instanceof ServerLevel level)) return;
 
-        BedSavedData bed = BedSavedData.get(level.getServer().overworld());
+        MinecraftServer server = level.getServer();
+
+        BedSavedData bed = server.getDataStorage().computeIfAbsent(BedSavedData.TYPE);
 
         if (bed.isDirty()) {
-            level.getDataStorage().saveAndJoin();
+            server.getDataStorage().saveAndJoin();
             bed.setDirty(false);
         }
 
-        PlayerUpgradeSavedData upgrade = PlayerUpgradeSavedData.get(level.getServer().overworld());
+        PlayerUpgradeSavedData upgrade = server.getDataStorage().computeIfAbsent(PlayerUpgradeSavedData.TYPE);
 
         if (upgrade.isDirty()) {
-            level.getDataStorage().saveAndJoin();
+            server.getDataStorage().saveAndJoin();
             upgrade.setDirty(false);
         }
 
-        MoneySavedData money = MoneySavedData.get(level.getServer().overworld());
+        MoneySavedData money = server.getDataStorage().computeIfAbsent(MoneySavedData.TYPE);
 
         if (money.isDirty()) {
-            level.getDataStorage().saveAndJoin();
+            server.getDataStorage().saveAndJoin();
             money.setDirty(false);
         }
 
-        GameSavedData game = GameSavedData.get(level.getServer().overworld());
+        GameSavedData game = server.getDataStorage().computeIfAbsent(GameSavedData.TYPE);
 
         if (game.isDirty()) {
-            level.getDataStorage().saveAndJoin();
+            server.getDataStorage().saveAndJoin();
             game.setDirty(false);
         }
 
-        PlayerSavedData player = PlayerSavedData.get(level.getServer().overworld());
+        LobbySavedData lobby = server.getDataStorage().computeIfAbsent(LobbySavedData.TYPE);
+
+        if (lobby.isDirty()) {
+            server.getDataStorage().saveAndJoin();
+            lobby.setDirty(false);
+        }
+
+        PlayerSavedData player = server.getDataStorage().computeIfAbsent(PlayerSavedData.TYPE);
 
         if (player.isDirty()) {
-            level.getDataStorage().saveAndJoin();
+            server.getDataStorage().saveAndJoin();
             player.setDirty(false);
         }
 
-        TeamSavedData team = TeamSavedData.get(level.getServer().overworld());
+        TeamSavedData team = server.getDataStorage().computeIfAbsent(TeamSavedData.TYPE);
 
         if (team.isDirty()) {
-            level.getDataStorage().saveAndJoin();
+            server.getDataStorage().saveAndJoin();
             team.setDirty(false);
         }
 
-        ScheduledEventsSavedData events = ScheduledEventsSavedData.get(level.getServer().overworld());
+        ScheduledEventsSavedData events = server.getDataStorage().computeIfAbsent(ScheduledEventsSavedData.TYPE);
 
         if (events.isDirty()) {
-            level.getDataStorage().saveAndJoin();
+            server.getDataStorage().saveAndJoin();
             PacketDistributor.sendToAllPlayers(
                     new SyncCalendarPayload(events.getCalendarEventData())
             );
             events.setDirty(false);
+        }
+
+        WorldBalanceSavedData balance = server.getDataStorage().computeIfAbsent(WorldBalanceSavedData.TYPE);
+
+        if (balance.isDirty()) {
+            server.getDataStorage().saveAndJoin();
+            balance.setDirty(false);
         }
     }
 

@@ -32,7 +32,7 @@ public class PlayerManager {
     public PlayerManager(MinecraftServer server, int maxDailySeconds) {
         this.server = server;
         this.maxDailySeconds = maxDailySeconds;
-        this.data = PlayerSavedData.get(server.overworld());
+        this.data = server.getDataStorage().computeIfAbsent(PlayerSavedData.TYPE);
 
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
     }

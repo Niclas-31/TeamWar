@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import de.niclasl.teamwar.TeamWar;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
@@ -25,10 +24,6 @@ public class PlayerSavedData extends SavedData {
             new SavedDataType<>(
                     Identifier.fromNamespaceAndPath(TeamWar.MOD_ID, "playtime"),
                     PlayerSavedData::new, CODEC);
-
-    public static PlayerSavedData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(TYPE);
-    }
 
     public Map<UUID, Integer> totalTime = new HashMap<>();
 

@@ -22,7 +22,7 @@ public class PvPManager {
 
     public PvPManager(MinecraftServer server) {
         this.server = server;
-        this.data = GameSavedData.get(server.overworld());
+        this.data = server.getDataStorage().computeIfAbsent(GameSavedData.TYPE);
 
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
 

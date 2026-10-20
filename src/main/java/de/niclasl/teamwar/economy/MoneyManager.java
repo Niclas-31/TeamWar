@@ -12,7 +12,7 @@ public class MoneyManager {
     private final MoneySavedData data;
 
     public MoneyManager(MinecraftServer server) {
-        this.data = MoneySavedData.get(server.overworld());
+        this.data = server.getDataStorage().computeIfAbsent(MoneySavedData.TYPE);
     }
 
     public double getTeamMoney(String teamName) {

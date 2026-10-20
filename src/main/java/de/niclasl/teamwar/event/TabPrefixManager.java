@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-@EventBusSubscriber(value = Dist.DEDICATED_SERVER)
+@EventBusSubscriber(modid = TeamWar.MOD_ID, value = Dist.DEDICATED_SERVER)
 public class TabPrefixManager {
 
     private static final Map<UUID, Boolean> adminStatus = new HashMap<>();

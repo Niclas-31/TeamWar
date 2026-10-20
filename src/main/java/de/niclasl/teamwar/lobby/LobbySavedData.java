@@ -9,7 +9,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
@@ -31,10 +30,6 @@ public class LobbySavedData extends SavedData {
             new SavedDataType<>(
                     Identifier.fromNamespaceAndPath(TeamWar.MOD_ID, "lobby"),
                     LobbySavedData::new, CODEC);
-
-    public static LobbySavedData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(TYPE);
-    }
 
     public ResourceKey<Level> dimension;
     public BlockPos spawn;

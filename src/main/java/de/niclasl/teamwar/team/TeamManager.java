@@ -23,7 +23,7 @@ public class TeamManager {
 
     public TeamManager(MinecraftServer server) {
         this.server = server;
-        this.data = TeamSavedData.get(server.overworld());
+        this.data = server.getDataStorage().computeIfAbsent(TeamSavedData.TYPE);
     }
 
     public Map<String, TeamLocation> getTeamSpawns() {

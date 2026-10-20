@@ -26,7 +26,7 @@ public class GameManager {
         this.server = server;
         this.playerManager = TeamWar.getPlayerManager();
 
-        this.data = GameSavedData.get(server.overworld());
+        this.data = server.getDataStorage().computeIfAbsent(GameSavedData.TYPE);
 
         loadGameState();
         startDayCycle();

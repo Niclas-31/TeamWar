@@ -8,7 +8,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import org.jspecify.annotations.NonNull;
@@ -28,10 +27,6 @@ public class TeamSavedData extends SavedData {
             new SavedDataType<>(
                     Identifier.fromNamespaceAndPath(TeamWar.MOD_ID, "teams"),
                     TeamSavedData::new, CODEC);
-
-    public static TeamSavedData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(TYPE);
-    }
 
     public final Map<String, Team> teams = new HashMap<>();
 

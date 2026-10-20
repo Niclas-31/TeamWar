@@ -9,7 +9,7 @@ public class ClassManager {
     private final PlayerUpgradeSavedData data;
 
     public ClassManager(MinecraftServer server) {
-        this.data = PlayerUpgradeSavedData.get(server.overworld());
+        this.data = server.getDataStorage().computeIfAbsent(PlayerUpgradeSavedData.TYPE);
     }
 
     public PlayerUpgrades getUpgrades(UUID uuid, PlayerClass playerClass) {

@@ -5,7 +5,6 @@ import de.niclasl.teamwar.TeamWar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
@@ -25,10 +24,6 @@ public class BedSavedData extends SavedData {
             new SavedDataType<>(
                     Identifier.fromNamespaceAndPath(TeamWar.MOD_ID, "beds"),
                     BedSavedData::new, CODEC);
-
-    public static BedSavedData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(TYPE);
-    }
 
     public final Map<String, TeamBed> teamBeds = new HashMap<>();
 

@@ -5,7 +5,6 @@ import de.niclasl.teamwar.TeamWar;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
@@ -27,10 +26,6 @@ public class PlayerUpgradeSavedData extends SavedData {
             new SavedDataType<>(
                     Identifier.fromNamespaceAndPath(TeamWar.MOD_ID, "upgrades"),
                     PlayerUpgradeSavedData::new, CODEC);
-
-    public static PlayerUpgradeSavedData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(TYPE);
-    }
 
     public final Map<UUID, PlayerUpgrades> playerUpgrades = new HashMap<>();
 

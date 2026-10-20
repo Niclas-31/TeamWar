@@ -14,7 +14,7 @@ public class LobbyManager {
 
     public LobbyManager(MinecraftServer server) {
         this.server = server;
-        this.data = LobbySavedData.get(server.overworld());
+        this.data = server.getDataStorage().computeIfAbsent(LobbySavedData.TYPE);
     }
 
     public void setLobbySpawn(ServerLevel level, BlockPos pos, float yaw, float pitch) {

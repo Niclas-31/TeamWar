@@ -6,7 +6,6 @@ import de.niclasl.teamwar.api.calendar.CalendarClientCache;
 import de.niclasl.teamwar.api.calendar.CalendarEventStatus;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
@@ -29,10 +28,6 @@ public class ScheduledEventsSavedData extends SavedData {
           );
 
   private final Map<UUID, PlannedEventEntry> events = new HashMap<>();
-
-  public static ScheduledEventsSavedData get(MinecraftServer server) {
-    return get(server.overworld());
-  }
 
   public static ScheduledEventsSavedData get(ServerLevel level) {
     return level.getDataStorage().computeIfAbsent(TYPE);
