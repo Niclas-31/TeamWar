@@ -31,6 +31,8 @@ public class WorldRepairManager {
 
         balance.setState(WorldBalanceState.UNSTABLE);
 
+        balance.setDirty();
+
         running = true;
         ticks = 0;
         errorTriggered = false;
@@ -52,6 +54,8 @@ public class WorldRepairManager {
 
             balance.setState(WorldBalanceState.INCOMPATIBLE);
 
+            balance.setDirty();
+
             Path overworldPath = level.getServer().getWorldPath(LevelResource.ROOT);
 
             Path repairFile = level.getServer().getServerDirectory()
@@ -72,7 +76,11 @@ public class WorldRepairManager {
 
     private static UUID getOrCreateWorldIdentity(Path overworldPath) throws IOException {
 
-        Path identityPath = overworldPath.resolve("world_identity.dat");
+        Path identityPath = overworldPath
+                .resolve("dimensions")
+                .resolve("minecraft")
+                .resolve("overworld")
+                .resolve("world_identity.dat");
 
         if (Files.exists(identityPath)) {
             String value = Files.readString(identityPath).trim();

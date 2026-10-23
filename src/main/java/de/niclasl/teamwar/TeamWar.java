@@ -30,6 +30,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
@@ -90,7 +91,7 @@ public class TeamWar {
     }
 
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) throws IOException {
+    public void onServerStarting(ServerStartingEvent event) {
         MinecraftServer server = event.getServer();
 
         teamManager = new TeamManager(server);
@@ -104,22 +105,39 @@ public class TeamWar {
         strengthManager = new StrengthManager(server);
         scoreboard = new TeamWarScoreboard(server);
         moneyManager = new MoneyManager(server);
+    }
 
-        WorldBalanceSavedData balance = server.getDataStorage().computeIfAbsent(WorldBalanceSavedData.TYPE);
+    @SubscribeEvent
+    public void onServerStarted(ServerStartedEvent event) {
+        MinecraftServer server = event.getServer();
 
-        if (balance.getState() == WorldBalanceState.INCOMPATIBLE) {
-            server.halt(false);
-            return;
-        }
+        try {
+            Path overworldPath = server.getWorldPath(LevelResource.ROOT)
+                    .resolve("dimensions")
+                    .resolve("minecraft")
+                    .resolve("overworld");
 
-        Path overworldPath = server.getWorldPath(LevelResource.ROOT);
+            UUID currentIdentity = getOrCreateWorldIdentity(overworldPath);
 
-        UUID currentIdentity = getOrCreateWorldIdentity(overworldPath);
-
-        if (isOverworldRegenerated(server, currentIdentity)) {
             WorldBalanceSavedData data = server.getDataStorage().computeIfAbsent(WorldBalanceSavedData.TYPE);
-            data.setState(WorldBalanceState.BALANCED);
-            data.setDirty();
+
+            if (isOverworldRegenerated(server, currentIdentity)) {
+
+                data.setState(WorldBalanceState.BALANCED);
+                data.setDirty();
+
+                LOGGER.info("Neue Oberwelt erkannt. Weltzustand auf BALANCED gesetzt.");
+                return;
+            }
+
+            if (data.getState() == WorldBalanceState.INCOMPATIBLE) {
+                LOGGER.error("Oberwelt wurde nicht als neu generiert bestätigt. Server wird gestoppt.");
+                server.halt(false);
+            }
+
+        } catch (IOException exception) {
+            LOGGER.error("Fehler bei der Überprüfung der Oberwelt.", exception);
+            server.halt(false);
         }
     }
 
@@ -141,10 +159,7 @@ public class TeamWar {
         try {
             previousIdentity = UUID.fromString(previousValue);
         } catch (IllegalArgumentException exception) {
-            throw new IOException(
-                    "Ungültige gespeicherte Oberwelt-ID.",
-                    exception
-            );
+            throw new IOException("Ungültige gespeicherte Oberwelt-ID.", exception);
         }
 
         if (previousIdentity.equals(currentIdentity)) {
