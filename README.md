@@ -45,4 +45,4 @@ Tester
 
 ## 📚 Documentation
 
-Link zum Wiki
+[Link zum Wiki](https://github.com/Niclas-31/TeamWar.wiki.git)
