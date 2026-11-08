@@ -14,6 +14,7 @@ import de.niclasl.teamwar.network.ModNetwork;
 import de.niclasl.teamwar.player.PlayerManager;
 import de.niclasl.teamwar.pvp.PvPManager;
 import de.niclasl.teamwar.registries.blocks.ModBlocks;
+import de.niclasl.teamwar.registries.entities.ModEntities;
 import de.niclasl.teamwar.registries.items.ModItems;
 import de.niclasl.teamwar.repair.WorldBalanceSavedData;
 import de.niclasl.teamwar.repair.WorldBalanceState;
@@ -73,6 +74,8 @@ public class TeamWar {
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+
+        ModEntities.register(modEventBus);
 
         Events.register();
 
