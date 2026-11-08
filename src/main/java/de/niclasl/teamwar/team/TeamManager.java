@@ -148,6 +148,8 @@ public class TeamManager {
                         "[" + team.getName() + "] "
                 ).withStyle(ChatFormatting.WHITE)
         );
+
+        scoreboardTeam.setAllowFriendlyFire(false);
     }
 
     public void deleteTeam(String teamName) {
